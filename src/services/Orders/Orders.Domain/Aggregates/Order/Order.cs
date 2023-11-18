@@ -13,6 +13,6 @@ namespace Orders.Domain.Aggregates.Order
 
         public string PhoneNumber { get; private set; }
 
-
+        public Address DeliveryAddress { get; private set; }
     }
 }

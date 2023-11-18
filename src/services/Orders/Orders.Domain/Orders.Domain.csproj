@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Aggregates\Delivery\" />
-    <Folder Include="Aggregates\Order\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
   </ItemGroup>
 
 </Project>
