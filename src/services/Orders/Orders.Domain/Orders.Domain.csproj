@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Aggregates\Delivery\" />
+    <PackageReference Include="MassTransit" Version="8.1.2" />
   </ItemGroup>
 
   <ItemGroup>
