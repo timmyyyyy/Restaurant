@@ -1,4 +1,8 @@
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using Orders.API.Infrastructure;
+using Orders.Domain.StateMachines;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +13,35 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<OrdersDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("Default");
+    options.UseSqlServer(connectionString, builder =>
+    {
+        builder.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+    });
+});
+
 builder.Services.AddMassTransit(x =>
 {
+    x.SetKebabCaseEndpointNameFormatter();
+
+    x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+        .EntityFrameworkRepository(x =>
+        {
+            // TODO concurrency mode
+            x.ExistingDbContext<OrdersDbContext>();
+        });
+
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.
+        cfg.Host("localhost", x =>
+        {
+            x.Username("guest");
+            x.Password("guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
     });
 });
 
@@ -26,7 +54,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// TODO
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

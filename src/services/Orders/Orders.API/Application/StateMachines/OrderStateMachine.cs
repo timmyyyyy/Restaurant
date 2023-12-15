@@ -13,6 +13,7 @@ namespace Orders.Domain.StateMachines
             InstanceState(x => x.CurrentState);
 
             Event(() => OrderValidatedSuccessfully, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderDraftCreated, x => x.CorrelateById(context => context.Message.OrderId));
 
             Initially(
                 When(OrderDraftCreated)
@@ -31,20 +32,20 @@ namespace Orders.Domain.StateMachines
         }
 
         public Event<OrderDraftCreatedDomainEvent> OrderDraftCreated { get; }
-        public Event<OrderSavedAsDraftIntegrationEvent> OrderSavedAsDraft { get; }
-        public Event<OrderSubmittedIntegrationEvent> OrderSubmitted { get; }
-        public Event<OrderAcceptedIntegrationEvent> OrderAccepted { get; }
-        public Event<OrderCancelledIntegrationEvent> OrderCancelled { get; }
-        public Event<OrderDeclinedIntegrationEvent> OrderDeclined { get; }
-        public Event<OrderDeliveredIntegrationEvent> OrderDelivered { get; }
-        public Event<OrderNotDeliveredIntegrationEvent> OrderNotDelivered { get; }
-        public Event<OrderPaidIntegrationEvent> OrderPaid { get; }
-        public Event<OrderPickedUpForDeliveryIntegrationEvent> OrderPickedUpForDelivery { get; }
-        public Event<OrderPickUpDeclinedIntegrationEvent> OrderPickUpDeclined { get; }
-        public Event<OrderReadyIntegrationEvent> OrderReady { get; }
+        //public Event<OrderSavedAsDraftIntegrationEvent> OrderSavedAsDraft { get; }
+        //public Event<OrderSubmittedIntegrationEvent> OrderSubmitted { get; }
+        //public Event<OrderAcceptedIntegrationEvent> OrderAccepted { get; }
+        //public Event<OrderCancelledIntegrationEvent> OrderCancelled { get; }
+        //public Event<OrderDeclinedIntegrationEvent> OrderDeclined { get; }
+        //public Event<OrderDeliveredIntegrationEvent> OrderDelivered { get; }
+        //public Event<OrderNotDeliveredIntegrationEvent> OrderNotDelivered { get; }
+        //public Event<OrderPaidIntegrationEvent> OrderPaid { get; }
+        //public Event<OrderPickedUpForDeliveryIntegrationEvent> OrderPickedUpForDelivery { get; }
+        //public Event<OrderPickUpDeclinedIntegrationEvent> OrderPickUpDeclined { get; }
+        //public Event<OrderReadyIntegrationEvent> OrderReady { get; }
         public Event<OrderValidatedSuccessfullyIntegrationEvent> OrderValidatedSuccessfully { get; }
-        public Event<OrderValidationFailedIntegrationEvent> OrderValidationFailed { get; }
-        public Event<PaymentRefundedIntegrationEvent> PaymentRefunded { get; }
+        //public Event<OrderValidationFailedIntegrationEvent> OrderValidationFailed { get; }
+        //public Event<PaymentRefundedIntegrationEvent> PaymentRefunded { get; }
 
         //public Request<OrderState, ValidateOrderRequest, ValidateOrderResponse> ValidateOrder { get; }
 
