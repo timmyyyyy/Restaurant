@@ -26,7 +26,7 @@ namespace Restaurant.Common.FlowBuildingBlocks
     public readonly struct OperationResult<T>
     {
         internal readonly OperationResultState state;
-        internal readonly T value;
+        internal readonly T value; 
         readonly Exception exception;
 
         public OperationResult(T val)

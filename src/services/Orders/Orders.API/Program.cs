@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Orders.API.Infrastructure;
+using Orders.API.Infrastructure.Extensions;
 using Orders.Domain.StateMachines;
 using System.Reflection;
 
@@ -13,14 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<OrdersDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("Default");
-    options.UseSqlServer(connectionString, builder =>
-    {
-        builder.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
-    });
-});
+builder.AddDbConfiguration();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
 builder.Services.AddMassTransit(x =>
 {
@@ -35,12 +31,6 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", x =>
-        {
-            x.Username("guest");
-            x.Password("guest");
-        });
-
         cfg.ConfigureEndpoints(context);
     });
 });

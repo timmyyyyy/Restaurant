@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Orders.API.Application.Commands;
 using Orders.API.Application.IntegrationEvents;
-using Orders.API.Application.Requests;
 using Orders.Domain.DomainEvents;
 
 namespace Orders.Domain.StateMachines
@@ -17,8 +16,7 @@ namespace Orders.Domain.StateMachines
 
             Initially(
                 When(OrderDraftCreated)
-                // TODO use address convertions
-                    .Send(context => 
+                    .Publish(context => 
                         new ValidateOrderCommand(context.Message.OrderId, context.Message.RestaurantId, context.Message.MenuItemsIds))
                     .TransitionTo(Draft)
                 );

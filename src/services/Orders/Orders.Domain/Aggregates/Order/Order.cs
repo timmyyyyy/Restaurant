@@ -25,7 +25,7 @@ namespace Orders.Domain.Aggregates.Order
 
         public Address DeliveryAddress { get; private set; }
 
-        public IEnumerable<Guid> MenuItemsIds { get; private set; }
+        public List<Guid> MenuItemsIds { get; private set; }
 
         internal Order()
         {
@@ -34,7 +34,7 @@ namespace Orders.Domain.Aggregates.Order
         }
 
         public static OperationResult<Order> CreateOrder(string? emailAddress, string? phoneNumber, Guid? customerId,
-            Guid restaurantId, Address deliveryAddress, IEnumerable<Guid> menuItemsIds)
+            Guid restaurantId, Address deliveryAddress, List<Guid> menuItemsIds)
         {
             if ((string.IsNullOrEmpty(emailAddress) || string.IsNullOrEmpty(phoneNumber)) && customerId == null)
             {

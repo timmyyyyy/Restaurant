@@ -5,7 +5,7 @@ using Orders.API.Application.Commands;
 namespace Orders.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -16,9 +16,9 @@ namespace Orders.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateOrder(CreateOrderDraftCommand command)
+        public async Task<IActionResult> CreateOrder(CreateOrderDraftCommand command)
         {
-            var response = _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
             // TODO
 

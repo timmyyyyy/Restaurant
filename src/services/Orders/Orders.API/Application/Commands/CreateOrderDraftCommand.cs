@@ -8,15 +8,15 @@ namespace Orders.API.Application.Commands
 {
     public class CreateOrderDraftCommand : IRequest<OrderDto>
     {
-        public string? EmailAddress { get; private set; }
+        public string? EmailAddress { get; init; }
 
-        public string? PhoneNumber { get; private set; }
+        public string? PhoneNumber { get; init; }
 
-        public Guid RestaurantId { get; private set; }
+        public Guid RestaurantId { get; init; }
 
-        public AddressDto DeliveryAddress { get; private set; }
+        public AddressDto DeliveryAddress { get; init; }
 
-        public IEnumerable<Guid> MenuItemsIds { get; private set; }
+        public List<Guid> MenuItemsIds { get; init; }
     }
 
     public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDto>

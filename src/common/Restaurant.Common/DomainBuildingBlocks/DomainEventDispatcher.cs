@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Restaurant.Common.FlowBuildingBlocks;
 using System.Threading.Tasks;
 
 namespace Restaurant.Common.DomainBuildingBlocks
@@ -17,7 +18,10 @@ namespace Restaurant.Common.DomainBuildingBlocks
         {
             foreach (var e in aggregateRoot.DomainEvents)
             {
-                await publishEndpoint.Publish(e);
+                if (e is IStronglyTypedNotification ste)
+                    await publishEndpoint.Publish(e, ste.Type);
+                else
+                    continue;
             }
         }
     }
