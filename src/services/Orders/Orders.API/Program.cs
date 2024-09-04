@@ -4,6 +4,7 @@ using Orders.API.Infrastructure;
 using Orders.API.Infrastructure.Extensions;
 using Orders.Domain.StateMachines;
 using System.Reflection;
+using Restaurant.Common.InfrastructureBuildingBlocks.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,26 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutomaticDependencyRegistration(Assembly.GetExecutingAssembly());
+
+builder.AddMassTransitConfiguration();
+
 builder.AddDbConfiguration();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
-
-builder.Services.AddMassTransit(x =>
-{
-    x.SetKebabCaseEndpointNameFormatter();
-
-    x.AddSagaStateMachine<OrderStateMachine, OrderState>()
-        .EntityFrameworkRepository(x =>
-        {
-            // TODO concurrency mode
-            x.ExistingDbContext<OrdersDbContext>();
-        });
-
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context);
-    });
-});
 
 var app = builder.Build();
 

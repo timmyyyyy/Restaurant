@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using Orders.Domain.StateMachines;
 using Restaurant.Common.InfrastructureBuildingBlocks;
 using System.Reflection;
 
@@ -18,6 +20,35 @@ namespace Orders.API.Infrastructure.Extensions
             });
 
             builder.Services.AddHostedService<MigrationsHostedService<OrdersDbContext>>();
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder AddMassTransitConfiguration(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddMassTransit(x =>
+            {
+                x.SetKebabCaseEndpointNameFormatter();
+
+                x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+                    .EntityFrameworkRepository(x =>
+                    {
+                        // TODO concurrency mode
+                        x.ExistingDbContext<OrdersDbContext>();
+                    });
+
+                x.AddEntityFrameworkOutbox<OrdersDbContext>(x =>
+                {
+                    x.UseSqlServer();
+
+                    x.UseBusOutbox();
+                });
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             return builder;
         }

@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Orders.API.Application.Commands;
 using Orders.API.Application.IntegrationEvents;
-using Orders.Domain.DomainEvents;
+using Orders.Domain.Aggregates.Order.DomainEvents;
 
 namespace Orders.Domain.StateMachines
 {
@@ -10,6 +10,8 @@ namespace Orders.Domain.StateMachines
         public OrderStateMachine()
         {
             InstanceState(x => x.CurrentState);
+
+
 
             Event(() => OrderValidatedSuccessfully, x => x.CorrelateById(context => context.Message.OrderId));
             Event(() => OrderDraftCreated, x => x.CorrelateById(context => context.Message.OrderId));

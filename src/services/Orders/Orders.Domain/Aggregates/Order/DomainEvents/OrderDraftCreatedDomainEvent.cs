@@ -2,7 +2,7 @@
 using Restaurant.Common.FlowBuildingBlocks;
 using System.Text.Json.Serialization;
 
-namespace Orders.Domain.DomainEvents
+namespace Orders.Domain.Aggregates.Order.DomainEvents
 {
     public class OrderDraftCreatedDomainEvent : IStronglyTypedNotification
     {

@@ -1,13 +1,7 @@
 ﻿using MassTransit;
-using Orders.Domain.DomainEvents;
+using Orders.Domain.Aggregates.Order.DomainEvents;
 using Restaurant.Common.DomainBuildingBlocks;
 using Restaurant.Common.FlowBuildingBlocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orders.Domain.Aggregates.Order
 {

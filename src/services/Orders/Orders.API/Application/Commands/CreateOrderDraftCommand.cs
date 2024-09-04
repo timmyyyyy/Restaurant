@@ -21,11 +21,11 @@ namespace Orders.API.Application.Commands
 
     public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDto>
     {
-        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMediator _mediator;
 
-        public CreateOrderDraftCommandHandler(IPublishEndpoint publishEndpoint)
+        public CreateOrderDraftCommandHandler(IMediator mediator)
         {
-            _publishEndpoint = publishEndpoint;
+            _mediator = mediator;
         }
 
         public async Task<OrderDto> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
@@ -43,7 +43,8 @@ namespace Orders.API.Application.Commands
             // TODO check if orderResult failed
 
             var order = orderResult.Value;
-            await _publishEndpoint.DispatchDomainEvents(order);
+            
+            await _mediator.DispatchDomainEvents(order, cancellationToken);
 
             // TODO
             return new OrderDto();
