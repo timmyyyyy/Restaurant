@@ -10,23 +10,9 @@ namespace Restaurant.Common.DomainBuildingBlocks
     {
         public static async Task DispatchDomainEvents(this MediatR.IMediator mediator, AggregateRoot aggregateRoot, CancellationToken cancellationToken)
         {
-            var eventsOfInterests = aggregateRoot.DomainEvents.Where(x => x is not IStronglyTypedNotification).ToArray();
-            foreach (var e in eventsOfInterests)
+            foreach (var e in aggregateRoot.DomainEvents)
             {
                 await mediator.Publish(e, cancellationToken);
-            }
-        }
-
-        public static async Task DispatchDomainEvents(this IPublishEndpoint publishEndpoint, AggregateRoot aggregateRoot, CancellationToken cancellationToken)
-        {
-            var eventsOfInterests = aggregateRoot.DomainEvents
-                .Where(x => x is IStronglyTypedNotification)
-                .Cast<IStronglyTypedNotification>()
-                .ToArray();
-
-            foreach (var e in eventsOfInterests)
-            {
-                await publishEndpoint.Publish(e, e.Type, cancellationToken);
             }
         }
     }

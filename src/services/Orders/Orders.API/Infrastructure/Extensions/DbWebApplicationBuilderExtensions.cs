@@ -1,6 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Orders.Domain.StateMachines;
+using Orders.Infrastructure;
+using Orders.Infrastructure.Models;
 using Restaurant.Common.InfrastructureBuildingBlocks;
 using System.Reflection;
 

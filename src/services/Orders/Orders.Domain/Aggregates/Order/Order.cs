@@ -54,7 +54,7 @@ namespace Orders.Domain.Aggregates.Order
                 RestaurantId = restaurantId
             };
 
-            order.AddDomainEvent(new OrderDraftCreatedDomainEvent(order.Id, order.RestaurantId, order.MenuItemsIds));
+            order.AddDomainEvent(new OrderDraftCreatedDomainEvent(order));
 
             return new OperationResult<Order>(order);
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Common.InfrastructureBuildingBlocks;
+using Restaurant.Infrastructure;
 using System.Reflection;
 
 namespace Restaurant.API.Infrastructure.Extensions

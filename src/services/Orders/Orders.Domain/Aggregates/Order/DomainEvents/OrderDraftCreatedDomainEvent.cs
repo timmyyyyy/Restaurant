@@ -1,25 +1,14 @@
 ﻿using MediatR;
-using Restaurant.Common.FlowBuildingBlocks;
-using System.Text.Json.Serialization;
 
 namespace Orders.Domain.Aggregates.Order.DomainEvents
 {
-    public class OrderDraftCreatedDomainEvent : IStronglyTypedNotification
+    public class OrderDraftCreatedDomainEvent : INotification
     {
-        public OrderDraftCreatedDomainEvent(Guid orderId, Guid restaurantId, List<Guid> menuItemsIds)
+        public OrderDraftCreatedDomainEvent(Order order)
         {
-            OrderId = orderId;
-            RestaurantId = restaurantId;
-            MenuItemsIds = menuItemsIds;
+            Order = order;
         }
 
-        [JsonIgnore]
-        public Type Type => typeof(OrderDraftCreatedDomainEvent);
-
-        public Guid OrderId { get; set; }
-
-        public Guid RestaurantId { get; private set; }
-
-        public List<Guid> MenuItemsIds { get; private set; }
+        public Order Order { get; private set; }
     }
 }
