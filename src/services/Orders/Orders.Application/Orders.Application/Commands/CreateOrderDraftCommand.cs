@@ -17,6 +17,8 @@ namespace Orders.Application.Commands
         public AddressDto DeliveryAddress { get; init; }
 
         public List<Guid> MenuItemsIds { get; init; }
+
+        public bool PaymentOnDelivery { get; set; }
     }
 
     public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDto>
@@ -38,7 +40,7 @@ namespace Orders.Application.Commands
             // TODO get from the httpContext after auth
             var customerId = Guid.NewGuid();
             var orderResult = Order.CreateOrder(request.EmailAddress, request.PhoneNumber, customerId, request.RestaurantId, 
-                addressResult.Value, request.MenuItemsIds);
+                addressResult.Value, request.MenuItemsIds, request.PaymentOnDelivery);
 
             // TODO check if orderResult failed
 

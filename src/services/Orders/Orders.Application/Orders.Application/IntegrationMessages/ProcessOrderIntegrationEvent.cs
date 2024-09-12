@@ -1,6 +1,6 @@
 ﻿using Orders.Application.Dtos;
 
-namespace Orders.Application.IntegrationEvents
+namespace Orders.Application.IntegrationMessages
 {
     public record ProcessOrderIntegrationEvent
     {

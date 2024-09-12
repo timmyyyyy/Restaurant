@@ -21,6 +21,8 @@ namespace Orders.Domain.Aggregates.Order
 
         public List<Guid> MenuItemsIds { get; private set; }
 
+        public bool PaymentOnDelivery { get; set; }
+
         internal Order()
         {
             Id = NewId.NextGuid();
@@ -28,7 +30,7 @@ namespace Orders.Domain.Aggregates.Order
         }
 
         public static OperationResult<Order> CreateOrder(string? emailAddress, string? phoneNumber, Guid? customerId,
-            Guid restaurantId, Address deliveryAddress, List<Guid> menuItemsIds)
+            Guid restaurantId, Address deliveryAddress, List<Guid> menuItemsIds, bool paymentOnDelivery)
         {
             if ((string.IsNullOrEmpty(emailAddress) || string.IsNullOrEmpty(phoneNumber)) && customerId == null)
             {
@@ -51,7 +53,8 @@ namespace Orders.Domain.Aggregates.Order
                 CustomerId = customerId,
                 DeliveryAddress = deliveryAddress,
                 MenuItemsIds = menuItemsIds,
-                RestaurantId = restaurantId
+                RestaurantId = restaurantId,
+                PaymentOnDelivery = paymentOnDelivery
             };
 
             order.AddDomainEvent(new OrderDraftCreatedDomainEvent(order));

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Consumers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.1.2" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.1.2" />
     <PackageReference Include="MediatR" Version="12.2.0" />
@@ -20,6 +16,10 @@
     <ProjectReference Include="..\..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
     <ProjectReference Include="..\..\Orders.Domain\Orders.Domain.csproj" />
     <ProjectReference Include="..\..\Orders.Infrastructure\Orders.Infrastructure\Orders.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Consumers\" />
   </ItemGroup>
 
 </Project>

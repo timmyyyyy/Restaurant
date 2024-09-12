@@ -4,6 +4,7 @@ using Orders.Domain.StateMachines;
 using Orders.Infrastructure;
 using Orders.Infrastructure.Models;
 using Restaurant.Common.InfrastructureBuildingBlocks;
+using Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
 using System.Reflection;
 
 namespace Orders.API.Infrastructure.Extensions
@@ -32,7 +33,7 @@ namespace Orders.API.Infrastructure.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
-                x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+                x.AddSagaStateMachine<OrderStateMachine, Order>()
                     .EntityFrameworkRepository(x =>
                     {
                         // TODO concurrency mode
@@ -51,6 +52,10 @@ namespace Orders.API.Infrastructure.Extensions
                     cfg.ConfigureEndpoints(context);
                 });
             });
+
+            builder.Services.AddSingleton<IMassTransitEndpointNameFormatter, RabbitMqEndpointNameFormatter>();
+            builder.Services.AddTransient<IAdaptedRoutingSlipBuilder, AdaptedRoutingSlipBuilder>();
+
 
             return builder;
         }

@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using MediatR;
 using Orders.Application.Dtos;
-using Orders.Application.IntegrationEvents;
+using Orders.Application.IntegrationMessages;
 using Orders.Domain.Aggregates.Order;
 using Orders.Domain.Aggregates.Order.DomainEvents;
 
@@ -27,7 +27,7 @@ namespace Orders.Application.DomainEventHandlers
 
             // TODO add mediatr behavior to wrap it in transaction, to make sure that no one will inovke it in other order
             await _publishEndpoint.Publish(orderReceivedIntegrationEvent, cancellationToken);
-            await _orderRepository.AddOrder(notification.Order);
+            //await _orderRepository.AddOrder(notification.Order);
         }
     }
 }
