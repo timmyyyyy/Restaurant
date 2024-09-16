@@ -1,7 +1,9 @@
-﻿namespace Orders.Infrastructure.Models
+﻿namespace Restaurant.Infrastructure.Models
 {
-    public class Address
+    public class AddressDbEntity
     {
+        public Guid Id { get; set; }
+
         public string PostCode { get; set; }
 
         public string City { get; set; }
@@ -11,7 +13,5 @@
         public string BuildingNumber { get; set; }
 
         public string? FlatNumber { get; set; }
-
-        public IEnumerable<Order> Orders { get; set; }
     }
 }

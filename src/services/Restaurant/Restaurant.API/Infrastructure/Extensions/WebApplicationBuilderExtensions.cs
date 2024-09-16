@@ -1,28 +1,26 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Orders.Domain.StateMachines;
-using Orders.Infrastructure;
-using Orders.Infrastructure.Models;
 using Restaurant.Common.InfrastructureBuildingBlocks;
 using Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
+using Restaurant.Infrastructure;
 using System.Reflection;
 
-namespace Orders.API.Infrastructure.Extensions
+namespace Restaurant.API.Infrastructure.Extensions
 {
-    public static class DbWebApplicationBuilderExtensions
+    public static class WebApplicationBuilderExtensions
     {
         public static WebApplicationBuilder AddDbConfiguration(this WebApplicationBuilder builder)
         {
-            builder.Services.AddDbContext<OrdersDbContext>(options =>
+            builder.Services.AddDbContext<RestaurantDbContext>(options =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("Default");
                 options.UseSqlServer(connectionString, builder =>
                 {
-                    builder.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+                    builder.MigrationsAssembly(typeof(InfrastructureMarker).Assembly.FullName);
                 });
             });
 
-            builder.Services.AddHostedService<MigrationsHostedService<OrdersDbContext>>();
+            builder.Services.AddHostedService<MigrationsHostedService<RestaurantDbContext>>();
 
             return builder;
         }
@@ -33,14 +31,7 @@ namespace Orders.API.Infrastructure.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
-                x.AddSagaStateMachine<OrderStateMachine, Order>()
-                    .EntityFrameworkRepository(x =>
-                    {
-                        // TODO concurrency mode
-                        x.ExistingDbContext<OrdersDbContext>();
-                    });
-
-                x.AddEntityFrameworkOutbox<OrdersDbContext>(x =>
+                x.AddEntityFrameworkOutbox<RestaurantDbContext>(x =>
                 {
                     x.UseSqlServer();
 
@@ -52,6 +43,13 @@ namespace Orders.API.Infrastructure.Extensions
                     cfg.ConfigureEndpoints(context);
                 });
             });
+
+
+            builder.Services.AddOptions<MassTransitHostOptions>()
+                .Configure(options =>
+                {
+                    options.WaitUntilStarted = true;
+                });
 
             builder.Services.AddSingleton<IMassTransitEndpointNameFormatter, RabbitMqEndpointNameFormatter>();
             builder.Services.AddTransient<IAdaptedRoutingSlipBuilder, AdaptedRoutingSlipBuilder>();

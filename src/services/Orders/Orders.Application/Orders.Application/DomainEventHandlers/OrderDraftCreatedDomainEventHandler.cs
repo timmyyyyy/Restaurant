@@ -22,7 +22,7 @@ namespace Orders.Application.DomainEventHandlers
         public async Task Handle(OrderDraftCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
             // TODO mapping
-            var orderDto = new OrderDto();
+            var orderDto = (OrderDto)notification.Order;
             var orderReceivedIntegrationEvent = new OrderReceivedIntegrationEvent(orderDto);
 
             // TODO add mediatr behavior to wrap it in transaction, to make sure that no one will inovke it in other order

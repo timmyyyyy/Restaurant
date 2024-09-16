@@ -3,17 +3,17 @@ using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Order = Orders.Infrastructure.Models.Order;
+using OrderDbEntity = Orders.Infrastructure.Models.OrderDbEntity;
 
 namespace Orders.Infrastructure.Configuration
 {
-    public class OrderStateInstanceMapConfiguration : SagaClassMap<Order>
+    public class OrderStateInstanceMapConfiguration : SagaClassMap<OrderDbEntity>
     {
-        protected override void Configure(EntityTypeBuilder<Order> entity, ModelBuilder model)
+        protected override void Configure(EntityTypeBuilder<OrderDbEntity> entity, ModelBuilder model)
         {
-            entity.HasKey(x => x.CorrelationId).IsClustered();
+            entity.HasKey(x => x.CorrelationId);
+            entity.Property(x => x.CorrelationId).ValueGeneratedNever();
 
-            entity.Property(x => x.CorrelationId);
             entity.Property(x => x.CurrentState);
             entity.Property(x => x.EmailAddress);
             entity.Property(x => x.RestaurantId);

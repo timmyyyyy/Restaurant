@@ -1,6 +1,7 @@
 ﻿namespace Payments.API.Application.IntegrationEvents
 {
-    public class PaymentConfirmedIntegrationEvent
+    public record PaymentConfirmedIntegrationEvent
     {
+        public Guid OrderId { get; init; }
     }
 }

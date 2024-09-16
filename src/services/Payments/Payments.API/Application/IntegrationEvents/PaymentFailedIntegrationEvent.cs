@@ -2,5 +2,6 @@
 {
     public record PaymentFailedIntegrationEvent
     {
+        public Guid OrderId { get; init; }
     }
 }

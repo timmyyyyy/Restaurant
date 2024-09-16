@@ -6,7 +6,7 @@ using Restaurant.Common.DomainBuildingBlocks;
 
 namespace Orders.Application.Commands
 {
-    public class CreateOrderDraftCommand : IRequest<OrderDto>
+    public class CreateOrderDraftCommand : IRequest<CreateOrderDraftCommandResponse>
     {
         public string? EmailAddress { get; init; }
 
@@ -18,10 +18,20 @@ namespace Orders.Application.Commands
 
         public List<Guid> MenuItemsIds { get; init; }
 
-        public bool PaymentOnDelivery { get; set; }
+        public bool PaymentOnDelivery { get; init; }
     }
 
-    public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDto>
+    public class CreateOrderDraftCommandResponse
+    {
+        public CreateOrderDraftCommandResponse(Guid orderId)
+        {
+            OrderId = orderId;
+        }
+
+        public Guid OrderId { get; init; }
+    }
+
+    public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, CreateOrderDraftCommandResponse>
     {
         private readonly IMediator _mediator;
 
@@ -30,7 +40,7 @@ namespace Orders.Application.Commands
             _mediator = mediator;
         }
 
-        public async Task<OrderDto> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
+        public async Task<CreateOrderDraftCommandResponse> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
         {
             var addressResult = Address.CreateAddress(request.DeliveryAddress.PostCode, request.DeliveryAddress.City, request.DeliveryAddress.Street,
                 request.DeliveryAddress.BuildingNumber, request.DeliveryAddress.FlatNumber);
@@ -49,7 +59,7 @@ namespace Orders.Application.Commands
             await _mediator.DispatchDomainEvents(order, cancellationToken);
 
             // TODO
-            return new OrderDto();
+            return new CreateOrderDraftCommandResponse(orderResult.Value.Id);
         }
     }
 }

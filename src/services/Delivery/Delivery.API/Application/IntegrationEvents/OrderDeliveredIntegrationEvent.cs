@@ -1,6 +1,7 @@
 ﻿namespace Delivery.API.Application.IntegrationEvents
 {
-    public class OrderDeliveredIntegrationEvent
+    public record OrderDeliveredIntegrationEvent
     {
+        public Guid OrderId { get; init; }
     }
 }

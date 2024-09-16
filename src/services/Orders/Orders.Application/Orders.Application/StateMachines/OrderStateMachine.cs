@@ -6,18 +6,29 @@ using Orders.Domain.Aggregates.Order;
 using Orders.Domain.Aggregates.Order.DomainEvents;
 using Orders.Infrastructure.Models;
 
-using Order = Orders.Infrastructure.Models.Order;
+using OrderDbEntity = Orders.Infrastructure.Models.OrderDbEntity;
 
 namespace Orders.Domain.StateMachines
 {
-    public class OrderStateMachine : MassTransitStateMachine<Order>
+    public class OrderStateMachine : MassTransitStateMachine<OrderDbEntity>
     {
         public OrderStateMachine()
         {
             InstanceState(x => x.CurrentState);
 
             Event(() => OrderReceived, x => x.CorrelateById(context => context.Message.Order.Id));
+            Event(() => PaymentConfirmed, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => PaymentFailed, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderAccepted, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderCancelled, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderDeclined, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderDelivered, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderNotDelivered, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderPickedUpForDelivery, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderReady, x => x.CorrelateById(context => context.Message.OrderId));
             Event(() => OrderValidatedSuccessfully, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => OrderValidationFailed, x => x.CorrelateById(context => context.Message.OrderId));
+            Event(() => PaymentRefunded, x => x.CorrelateById(context => context.Message.OrderId));
 
             Initially(
                 When(OrderReceived)
@@ -120,15 +131,15 @@ namespace Orders.Domain.StateMachines
         public State Completed { get; private set; }
         public State NotDelivered { get; private set; }
 
-        private EventActivityBinder<Order, OrderReceivedIntegrationEvent> PassToValidation(
-            EventActivityBinder<Order, OrderReceivedIntegrationEvent> binder)
+        private EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> PassToValidation(
+            EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> binder)
         {
             binder.PublishAsync(ctx => ctx.Init<PassOrderToValidationCommand>(new { ctx.Message.Order }));
             return binder.TransitionTo(DuringValidation);
         }
 
-        private EventActivityBinder<Order, T> ProcessPaymentRefund<T>(
-            EventActivityBinder<Order, T> binder)
+        private EventActivityBinder<OrderDbEntity, T> ProcessPaymentRefund<T>(
+            EventActivityBinder<OrderDbEntity, T> binder)
             where T: class, IBaseOrderMessage
         {
             binder.PublishAsync(ctx => ctx.Init<RefundPaymentCommand>(new { }));
@@ -138,31 +149,35 @@ namespace Orders.Domain.StateMachines
 
     public static class OrderStateMachineActivityExtensions
     {
-        public static EventActivityBinder<Order, OrderValidatedSuccessfullyIntegrationEvent> ProcessForAcceptance
-            (this EventActivityBinder<Order, OrderValidatedSuccessfullyIntegrationEvent> binder)
+        public static EventActivityBinder<OrderDbEntity, OrderValidatedSuccessfullyIntegrationEvent> ProcessForAcceptance
+            (this EventActivityBinder<OrderDbEntity, OrderValidatedSuccessfullyIntegrationEvent> binder)
         {
             return binder.PublishAsync(ctx => ctx.Init<PassOrderToAcceptanceCommand>(new { }));
         }
 
-        public static EventActivityBinder<Order, PaymentConfirmedIntegrationEvent> PassToValidation
-            (this EventActivityBinder<Order, PaymentConfirmedIntegrationEvent> binder)
+        public static EventActivityBinder<OrderDbEntity, PaymentConfirmedIntegrationEvent> PassToValidation
+            (this EventActivityBinder<OrderDbEntity, PaymentConfirmedIntegrationEvent> binder)
         {
             return binder.Activity(x => x.OfType<OrderPaidActivity>());
         }
 
-        public static EventActivityBinder<Order, OrderReadyIntegrationEvent> PassToDelivery
-            (this EventActivityBinder<Order, OrderReadyIntegrationEvent> binder)
+        public static EventActivityBinder<OrderDbEntity, OrderReadyIntegrationEvent> PassToDelivery
+            (this EventActivityBinder<OrderDbEntity, OrderReadyIntegrationEvent> binder)
         {
             return binder.PublishAsync(ctx => ctx.Init<PassOrderToDeliveryCommand>(new { }));
         }
 
-        public static EventActivityBinder<Order, OrderReceivedIntegrationEvent> InitProcessManager
-            (this EventActivityBinder<Order, OrderReceivedIntegrationEvent> binder)
+        public static EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> InitProcessManager
+            (this EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> binder)
         {
             return binder.Then(x =>
             {
                 x.Saga.CorrelationId = x.Message.Order.Id;
-                x.Saga.PaymentOnDelivery = x.Message.Order.PaymentOnDelivery;
+                x.Saga.PhoneNumber = x.Message.Order.PhoneNumber;
+                x.Saga.EmailAddress = x.Message.Order.EmailAddress;
+                x.Saga.RestaurantId = x.Message.Order.RestaurantId;
+                x.Saga.CustomerId = x.Message.Order.CustomerId;
+                x.Saga.DeliveryAddress = (AddressDbEntity)x.Message.Order.DeliveryAddress;
             });
         }
     }
