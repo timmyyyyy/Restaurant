@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.1.2" />
+    <PackageReference Include="MassTransit" Version="8.2.5" />
   </ItemGroup>
 
 </Project>
