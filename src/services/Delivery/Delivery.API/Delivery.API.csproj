@@ -22,4 +22,8 @@
     <Folder Include="Infrastructure\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
+  </ItemGroup>
+
 </Project>

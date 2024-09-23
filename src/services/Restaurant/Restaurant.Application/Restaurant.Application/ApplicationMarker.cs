@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.IntegrationMessages
+namespace Restaurant.Application
 {
-    public record RefundPaymentCommand
+    public class ApplicationMarker
     {
-        public Guid OrderId { get; init; }
     }
 }

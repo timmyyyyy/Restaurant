@@ -1,6 +1,6 @@
 ﻿using Orders.Application.Dtos;
 
-namespace Orders.Application.IntegrationMessages
+namespace Restaurant.IntegrationMessages
 {
     public record OrderReceivedIntegrationEvent
     {

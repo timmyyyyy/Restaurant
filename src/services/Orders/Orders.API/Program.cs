@@ -5,6 +5,9 @@ using Orders.API.Infrastructure.Extensions;
 using Orders.Domain.StateMachines;
 using System.Reflection;
 using Restaurant.Common.InfrastructureBuildingBlocks.DI;
+using Orders.Application;
+using Orders.Infrastructure;
+using Restaurant.Common.InfrastructureBuildingBlocks.Telemetry;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +18,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutomaticDependencyRegistration(Assembly.GetExecutingAssembly());
+var assemblies = new Assembly[] { typeof(ApplicationMarker).Assembly, typeof(InfrastructureMarker).Assembly, Assembly.GetExecutingAssembly() };
+builder.Services.AddAutomaticDependencyRegistration(assemblies);
 
 builder.AddMassTransitConfiguration();
 
 builder.AddDbConfiguration();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddOpenTelemetry("Orders");
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>());
 
 var app = builder.Build();
 
@@ -38,5 +44,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseOpenTelemetry();
 
 app.Run();

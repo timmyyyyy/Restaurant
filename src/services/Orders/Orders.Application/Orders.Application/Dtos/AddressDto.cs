@@ -42,5 +42,18 @@ namespace Orders.Application.Dtos
                 FlatNumber = address.FlatNumber
             };
         }
+
+        public static explicit operator AddressDto(AddressDbEntity address)
+        {
+            return new()
+            {
+                Id = address.Id,
+                PostCode = address.PostCode,
+                City = address.City,
+                Street = address.Street,
+                BuildingNumber = address.BuildingNumber,
+                FlatNumber = address.FlatNumber
+            };
+        }
     }
 }

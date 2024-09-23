@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Restaurant.Application;
-using Restaurant.Application.IntegrationMessages;
+using Restaurant.IntegrationMessages;
 
 namespace Restaurant.Application.Consumers
 {

@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["src/services/Restaurant.API/Restaurant.API.csproj", "src/services/Restaurant.API/"]
-RUN dotnet restore "src/services/Restaurant.API/Restaurant.API.csproj"
+COPY ["src/services/Restaurant/Restaurant.API/Restaurant.API.csproj", "src/services/Restaurant/Restaurant.API/"]
+RUN dotnet restore "src/services/Restaurant/Restaurant.API/Restaurant.API.csproj"
 COPY . .
-WORKDIR "/src/src/services/Restaurant.API"
+WORKDIR "/src/src/services/Restaurant/Restaurant.API"
 RUN dotnet build "Restaurant.API.csproj" -c Release -o /app/build
 
 FROM build AS publish

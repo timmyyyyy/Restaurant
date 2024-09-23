@@ -24,11 +24,15 @@ namespace Restaurant.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(InfrastructureMarker).Assembly);
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.AddInboxStateEntity();
             modelBuilder.AddOutboxMessageEntity();
             modelBuilder.AddOutboxStateEntity();
+
+            modelBuilder.Entity<MenuItemDbEntity>(x => x.Property(y => y.Price).HasPrecision(2));
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Restaurant.Application;
+using Restaurant.Application.Consumers;
 using Restaurant.Common.InfrastructureBuildingBlocks;
 using Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
 using Restaurant.Infrastructure;
@@ -42,7 +44,10 @@ namespace Restaurant.API.Infrastructure.Extensions
                 {
                     cfg.ConfigureEndpoints(context);
                 });
+
+                x.AddConsumersFromNamespaceContaining<ApplicationMarker>();
             });
+
 
 
             builder.Services.AddOptions<MassTransitHostOptions>()

@@ -51,5 +51,20 @@ namespace Orders.Application.Dtos
                 CustomerId = order.CustomerId,
             };
         }
+
+        public static explicit operator OrderDto(OrderDbEntity order)
+        {
+            return new()
+            {
+                Id = order.CorrelationId,
+                EmailAddress = order.EmailAddress,
+                PhoneNumber = order.PhoneNumber,
+                RestaurantId = order.RestaurantId,
+                MenuItemsIds = order.MenuItemsIds,
+                PaymentOnDelivery = order.PaymentOnDelivery,
+                DeliveryAddress = (AddressDto)order.DeliveryAddress,
+                CustomerId = order.CustomerId,
+            };
+        }
     }
 }

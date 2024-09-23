@@ -1,4 +1,4 @@
-﻿namespace Restaurant.Application.IntegrationMessages
+﻿namespace Restaurant.IntegrationMessages
 {
     public record OrderAcceptedIntegrationEvent
     {

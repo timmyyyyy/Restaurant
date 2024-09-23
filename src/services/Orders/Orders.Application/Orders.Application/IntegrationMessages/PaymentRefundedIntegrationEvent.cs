@@ -1,5 +1,5 @@
 ﻿
-namespace Orders.Application.IntegrationMessages
+namespace Restaurant.IntegrationMessages
 {
     public record PaymentRefundedIntegrationEvent : IBaseOrderMessage
     {

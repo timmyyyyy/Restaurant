@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace Orders.Application.IntegrationMessages
+namespace Restaurant.IntegrationMessages
 {
     [ExcludeFromTopology]
     public interface IBaseOrderMessage

@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Orders.Application;
 using Orders.Domain.StateMachines;
 using Orders.Infrastructure;
 using Orders.Infrastructure.Models;
@@ -51,6 +52,8 @@ namespace Orders.API.Infrastructure.Extensions
                 {
                     cfg.ConfigureEndpoints(context);
                 });
+
+                x.AddActivitiesFromNamespaceContaining<ApplicationMarker>();
             });
 
             builder.Services.AddOptions<MassTransitHostOptions>()

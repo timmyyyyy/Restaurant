@@ -1,6 +1,6 @@
 ﻿using Restaurant.Application.Dtos;
 
-namespace Restaurant.Application.IntegrationMessages
+namespace Restaurant.IntegrationMessages
 {
     public record PassOrderToValidationCommand
     {

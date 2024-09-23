@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Orders.Application.Dtos;
-using Orders.Application.IntegrationMessages;
+using Restaurant.IntegrationMessages;
 using Orders.Infrastructure;
 using Orders.Infrastructure.Models;
 

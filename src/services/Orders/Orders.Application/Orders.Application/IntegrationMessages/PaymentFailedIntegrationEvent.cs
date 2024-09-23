@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Orders.Application.IntegrationMessages
+namespace Restaurant.IntegrationMessages
 {
     public record PaymentFailedIntegrationEvent : IBaseOrderMessage
     {

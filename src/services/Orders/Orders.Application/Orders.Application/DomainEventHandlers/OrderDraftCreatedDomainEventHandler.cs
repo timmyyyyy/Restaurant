@@ -1,9 +1,10 @@
 ﻿using MassTransit;
 using MediatR;
 using Orders.Application.Dtos;
-using Orders.Application.IntegrationMessages;
+using Restaurant.IntegrationMessages;
 using Orders.Domain.Aggregates.Order;
 using Orders.Domain.Aggregates.Order.DomainEvents;
+using Orders.Infrastructure;
 
 namespace Orders.Application.DomainEventHandlers
 {
@@ -13,10 +14,14 @@ namespace Orders.Application.DomainEventHandlers
 
         private readonly IOrderRepository _orderRepository;
 
-        public OrderDraftCreatedDomainEventHandler(IPublishEndpoint publishEndpoint, IOrderRepository orderRepository)
+        private readonly OrdersDbContext _ordersDbContext;
+
+        public OrderDraftCreatedDomainEventHandler(IPublishEndpoint publishEndpoint, IOrderRepository orderRepository,
+            OrdersDbContext ordersDbContext)
         {
             _publishEndpoint = publishEndpoint;
             _orderRepository = orderRepository;
+            _ordersDbContext = ordersDbContext;
         }
 
         public async Task Handle(OrderDraftCreatedDomainEvent notification, CancellationToken cancellationToken)
@@ -27,6 +32,7 @@ namespace Orders.Application.DomainEventHandlers
 
             // TODO add mediatr behavior to wrap it in transaction, to make sure that no one will inovke it in other order
             await _publishEndpoint.Publish(orderReceivedIntegrationEvent, cancellationToken);
+            await _ordersDbContext.SaveChangesAsync(cancellationToken);
             //await _orderRepository.AddOrder(notification.Order);
         }
     }

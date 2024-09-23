@@ -1,4 +1,4 @@
-﻿namespace Payments.API.Application.IntegrationEvents
+﻿namespace Restaurant.IntegrationMessages
 {
     public record PaymentFailedIntegrationEvent
     {
