@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes
 {
-    public class MenuItemDaysOfWeekAvailability : MenuItemAvailability
+    public sealed class MenuItemDaysOfWeekAvailability : MenuItemAvailability
     {
+        internal MenuItemDaysOfWeekAvailability() { }
+
         public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.DaysOfTheWeek;
 
-        public List<DayOfWeek> DaysOfWeek { get; set; }
+        public List<DayOfWeek> DaysOfWeek { get; init; }
 
         public override bool IsCurrentlyAvailable() => DaysOfWeek.Contains(DateTime.UtcNow.DayOfWeek);
     }

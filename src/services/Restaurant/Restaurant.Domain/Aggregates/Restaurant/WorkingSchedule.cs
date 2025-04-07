@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Restaurant.Domain.Aggregates.Restaurant
 {
-    public class WorkingSchedule : ValueObject
+    public sealed class WorkingSchedule : ValueObject
     {
-        public IDictionary<DayOfWeek, WorkingHours> Schedule { get; set; }
+        public IDictionary<DayOfWeek, WorkingHours> Schedule { get; init; }
     }
 }

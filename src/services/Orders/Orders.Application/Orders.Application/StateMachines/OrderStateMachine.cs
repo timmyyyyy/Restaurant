@@ -9,7 +9,7 @@ using Orders.Infrastructure.Models;
 
 using OrderDbEntity = Orders.Infrastructure.Models.OrderDbEntity;
 
-namespace Orders.Domain.StateMachines
+namespace Orders.Application.StateMachines
 {
     public class OrderStateMachine : MassTransitStateMachine<OrderDbEntity>
     {

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MassTransit;
 using Restaurant.Infrastructure.Models;
+using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+using MassTransit.EntityFrameworkCoreIntegration;
 
 namespace Restaurant.Infrastructure
 {
-    public class RestaurantDbContext : DbContext
+    public class RestaurantDbContext : BaseDbContext
     {
         public RestaurantDbContext(DbContextOptions options) : base(options) { }
 
@@ -22,6 +24,8 @@ namespace Restaurant.Infrastructure
 
         public DbSet<WorkingScheduleDbEntity> WorkingSchedules { get; set; }
 
+        protected override IEnumerable<ISagaClassMap> Configurations => Enumerable.Empty<ISagaClassMap>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(InfrastructureMarker).Assembly);
@@ -32,7 +36,7 @@ namespace Restaurant.Infrastructure
             modelBuilder.AddOutboxMessageEntity();
             modelBuilder.AddOutboxStateEntity();
 
-            modelBuilder.Entity<MenuItemDbEntity>(x => x.Property(y => y.Price).HasPrecision(2));
+            //modelBuilder.Entity<MenuItemDbEntity>(x => x.Property(y => y.Price).HasPrecision(2));
         }
     }
 }

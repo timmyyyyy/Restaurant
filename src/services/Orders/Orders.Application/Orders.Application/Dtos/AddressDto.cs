@@ -5,8 +5,6 @@ namespace Orders.Application.Dtos
 {
     public record AddressDto
     {
-        public Guid Id { get; init; }
-
         public string PostCode { get; init; }
 
         public string City { get; init; }
@@ -21,7 +19,6 @@ namespace Orders.Application.Dtos
         {
             return new()
             {
-                Id = address.Id,
                 PostCode = address.PostCode,
                 City = address.City,
                 Street = address.Street,
@@ -34,7 +31,6 @@ namespace Orders.Application.Dtos
         {
             return new()
             {
-                Id = address.Id,
                 PostCode = address.PostCode,
                 City = address.City,
                 Street = address.Street,
@@ -47,7 +43,6 @@ namespace Orders.Application.Dtos
         {
             return new()
             {
-                Id = address.Id,
                 PostCode = address.PostCode,
                 City = address.City,
                 Street = address.Street,

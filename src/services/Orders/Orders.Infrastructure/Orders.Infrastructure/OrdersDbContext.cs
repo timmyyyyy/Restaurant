@@ -3,10 +3,11 @@ using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
 using Orders.Infrastructure.Configuration;
 using Orders.Infrastructure.Models;
+using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
 
 namespace Orders.Infrastructure
 {
-    public class OrdersDbContext : SagaDbContext
+    public class OrdersDbContext : BaseDbContext
     {
         public OrdersDbContext(DbContextOptions options) : base(options)
         {

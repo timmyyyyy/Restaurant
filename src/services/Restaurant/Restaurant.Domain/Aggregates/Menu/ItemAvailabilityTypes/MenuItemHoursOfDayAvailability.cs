@@ -2,13 +2,15 @@
 
 namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes
 {
-    public class MenuItemHoursOfDayAvailability : MenuItemAvailability
+    public sealed class MenuItemHoursOfDayAvailability : MenuItemAvailability
     {
+        internal MenuItemHoursOfDayAvailability() { }
+
         public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.HoursOfTheDay;
 
-        public TimeOnly StartTime { get; set; }
+        public TimeOnly StartTime { get; init; }
 
-        public TimeOnly EndTime { get; set; }
+        public TimeOnly EndTime { get; init; }
 
         public override bool IsCurrentlyAvailable()
         {

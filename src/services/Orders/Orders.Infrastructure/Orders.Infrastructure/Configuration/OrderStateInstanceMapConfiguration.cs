@@ -25,7 +25,7 @@ namespace Orders.Infrastructure.Configuration
                 .HasConversion(
                     x => JsonSerializer.Serialize(x, new JsonSerializerOptions()),
                     x => JsonSerializer.Deserialize<List<Guid>>(x, new JsonSerializerOptions())!);
-            entity.HasOne(x => x.DeliveryAddress).WithMany(x => x.Orders).HasForeignKey(x => x.CorrelationId);
+            entity.OwnsOne(x => x.DeliveryAddress);
         }
     }
 }

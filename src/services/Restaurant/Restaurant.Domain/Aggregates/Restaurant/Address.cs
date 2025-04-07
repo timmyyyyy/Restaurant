@@ -2,16 +2,16 @@
 
 namespace Restaurant.Domain.Aggregates.Restaurant
 {
-    public class Address : ValueObject
+    public sealed class Address : ValueObject
     {
-        public string PostCode { get; set; }
+        public string PostCode { get; init; }
 
-        public string City { get; set; }
+        public string City { get; init; }
 
-        public string Street { get; set; }
+        public string Street { get; init; }
 
-        public string BuildingNumber { get; set; }
+        public string BuildingNumber { get; init; }
 
-        public string? FlatNumber { get; set; }
+        public string? FlatNumber { get; init; }
     }
 }

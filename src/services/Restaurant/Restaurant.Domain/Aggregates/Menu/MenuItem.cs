@@ -5,21 +5,21 @@ using System.Linq;
 
 namespace Restaurant.Domain.Aggregates.Menu
 {
-    public class MenuItem : ValueObject
+    public sealed class MenuItem : ValueObject
     {
-        public string Name { get; set; }
+        public string Name { get; init; }
 
-        public string Description { get; set; }
+        public string Description { get; init; }
 
-        public MenuItemCategory ItemCategory { get; set; }
+        public MenuItemCategory ItemCategory { get; init; }
 
-        public int? Grammage { get; set; }
+        public int? Grammage { get; init; }
 
-        public decimal Price { get; set; }
+        public decimal Price { get; init; }
 
-        public IEnumerable<MenuItemAvailability> Availability { get; set; }
+        public IEnumerable<MenuItemAvailability> Availability { get; init; }
 
-        public bool IsCurrentlyDisabled { get; set; }
+        public bool IsCurrentlyDisabled { get; init; }
 
         public bool IsAvailable()
         {

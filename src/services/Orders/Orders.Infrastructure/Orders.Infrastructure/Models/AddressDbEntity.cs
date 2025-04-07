@@ -1,8 +1,17 @@
-﻿namespace Orders.Infrastructure.Models
+﻿using Orders.Domain.Aggregates.Order;
+
+namespace Orders.Infrastructure.Models
 {
     public class AddressDbEntity
     {
-        public Guid Id { get; set; }
+        public AddressDbEntity(string postCode, string city, string street, string buildingNumber, string? flatNumber)
+        {
+            PostCode = postCode;
+            City = city;
+            Street = street;
+            BuildingNumber = buildingNumber;
+            FlatNumber = flatNumber;
+        }
 
         public string PostCode { get; set; }
 
@@ -14,6 +23,10 @@
 
         public string? FlatNumber { get; set; }
 
-        public IEnumerable<OrderDbEntity> Orders { get; set; }
+        public static explicit operator Address(AddressDbEntity entity)
+            => new(entity.PostCode, entity.City, entity.Street, entity.BuildingNumber, entity.FlatNumber);
+
+        public static explicit operator AddressDbEntity(Address address)
+            => new(address.PostCode, address.City, address.Street, address.BuildingNumber, address.FlatNumber);
     }
 }

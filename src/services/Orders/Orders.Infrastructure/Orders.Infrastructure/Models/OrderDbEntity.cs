@@ -1,12 +1,12 @@
 ﻿using MassTransit;
+using Orders.Domain.Aggregates.Order;
+using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
 
 namespace Orders.Infrastructure.Models
 {
-    public class OrderDbEntity : SagaStateMachineInstance
+    public class OrderDbEntity : BaseDbEntity, SagaStateMachineInstance
     {
         // TODO optimistic concurrency field with version
-
-        // TODO CorrelationId should be primary key with clustered index
         public Guid CorrelationId { get; set; }
 
         public string CurrentState { get; set; }
@@ -24,5 +24,23 @@ namespace Orders.Infrastructure.Models
         public List<Guid> MenuItemsIds { get; set; }
 
         public bool PaymentOnDelivery { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
+
+        //public static explicit operator OrderDbEntity(Order order) 
+        //    => new OrderDbEntity()
+        //    {
+        //        Id = order.Id,
+        //        EmailAddress = order.EmailAddress,
+        //        DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
+        //        PaymentOnDelivery = order.PaymentOnDelivery,
+        //        d
+        //    }
     }
 }

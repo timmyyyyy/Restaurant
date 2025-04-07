@@ -2,8 +2,8 @@
 
 namespace Restaurant.Domain.Aggregates.Menu
 {
-    public class MenuItemCategory : ValueObject
+    public sealed class MenuItemCategory : ValueObject
     {
-        public string CategoryName { get; set; }
+        public string CategoryName { get; init; }
     }
 }

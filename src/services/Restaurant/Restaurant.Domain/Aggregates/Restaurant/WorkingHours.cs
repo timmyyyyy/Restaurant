@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Restaurant.Domain.Aggregates.Restaurant
 {
-    public class WorkingHours : ValueObject
+    public sealed class WorkingHours : ValueObject
     {
-        public TimeOnly Start { get; set; }
+        public TimeOnly Start { get; init; }
 
-        public TimeOnly End { get; set; }
+        public TimeOnly End { get; init; }
     }
 }

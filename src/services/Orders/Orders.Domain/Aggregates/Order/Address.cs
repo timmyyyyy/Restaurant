@@ -3,18 +3,8 @@ using Restaurant.Common.FlowBuildingBlocks;
 
 namespace Orders.Domain.Aggregates.Order
 {
-    public class Address : ValueObject
+    public sealed class Address : ValueObject
     {
-        public string PostCode { get; set; }
-
-        public string City { get; set; }
-
-        public string Street { get; set; }
-
-        public string BuildingNumber { get; set; }
-
-        public string? FlatNumber { get; set; }
-
         internal Address(string postCode, string city, string street, string buildingNumber, string? flatNumber)
         {
             PostCode = postCode;
@@ -23,6 +13,16 @@ namespace Orders.Domain.Aggregates.Order
             BuildingNumber = buildingNumber;
             FlatNumber = flatNumber;
         }
+
+        public string PostCode { get; init; }
+
+        public string City { get; init; }
+
+        public string Street { get; init; }
+
+        public string BuildingNumber { get; init; }
+
+        public string? FlatNumber { get; init; }
 
         public static OperationResult<Address> CreateAddress(string postCode, string city, string street,
             string buildingNumber, string? flatNumber)

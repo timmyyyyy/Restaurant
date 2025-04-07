@@ -5,29 +5,29 @@ using Restaurant.Common.FlowBuildingBlocks;
 
 namespace Orders.Domain.Aggregates.Order
 {
-    public class Order : AggregateRoot
+    public sealed class Order : AggregateRoot
     {
-        public OrderStatus Status { get; private set; }
-
-        public string? EmailAddress { get; private set; }
-
-        public string? PhoneNumber { get; private set; }
-
-        public Guid? CustomerId { get; private set; }
-
-        public Guid RestaurantId { get; private set; }
-
-        public Address DeliveryAddress { get; private set; }
-
-        public List<Guid> MenuItemsIds { get; private set; }
-
-        public bool PaymentOnDelivery { get; set; }
-
         internal Order()
         {
-            Id = NewId.NextGuid();
+            Id = NewId.NextSequentialGuid();
             Status = OrderStatus.Draft;
         }
+
+        public OrderStatus Status { get; init; }
+
+        public string? EmailAddress { get; init; }
+
+        public string? PhoneNumber { get; init; }
+
+        public Guid? CustomerId { get; init; }
+
+        public Guid RestaurantId { get; init; }
+
+        public Address DeliveryAddress { get; init; }
+
+        public List<Guid> MenuItemsIds { get; init; }
+
+        public bool PaymentOnDelivery { get; init; }
 
         public static OperationResult<Order> CreateOrder(string? emailAddress, string? phoneNumber, Guid? customerId,
             Guid restaurantId, Address deliveryAddress, List<Guid> menuItemsIds, bool paymentOnDelivery)

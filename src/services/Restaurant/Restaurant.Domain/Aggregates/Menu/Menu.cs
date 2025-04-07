@@ -1,12 +1,31 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
+﻿using MassTransit;
+using Restaurant.Common.DomainBuildingBlocks;
+using System;
 using System.Collections.Generic;
 
 namespace Restaurant.Domain.Aggregates.Menu
 {
-    public class Menu : AggregateRoot
+    public sealed class Menu : AggregateRoot
     {
-        public string Name { get; private set; }
+        internal Menu() { }
 
-        public IEnumerable<MenuItem> Items { get; private set; }
+        internal Menu(string name, IEnumerable<MenuItem> items) : base()
+        {
+            Name = name;
+            Items = items;
+        }
+
+        public string Name { get; init; }
+
+        public IEnumerable<MenuItem> Items { get; init; }
+
+        public Guid RestaurantId { get; init; }
+
+        public static Menu Create(string name, IEnumerable<MenuItem> items)
+        {
+            // TODO validation?
+
+            return new Menu(name, items);
+        }
     }
 }
