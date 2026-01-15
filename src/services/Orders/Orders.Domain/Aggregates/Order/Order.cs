@@ -37,14 +37,14 @@ namespace Orders.Domain.Aggregates.Order
             {
                 // TODO
                 var ex = new Exception();
-                return new OperationResult<Order>(ex);
+                return OperationResult<Order>.Failed(ex);
             }
 
             if ((!string.IsNullOrEmpty(input.EmailAddress) || !string.IsNullOrEmpty(input.PhoneNumber)) && input.CustomerId != null)
             {
                 // TODO
                 var ex = new Exception();
-                return new OperationResult<Order>(ex);
+                return OperationResult<Order>.Failed(ex);
             }
 
             var addressResult = Address.CreateAddress(input.AddressCreationParams);
@@ -53,7 +53,7 @@ namespace Orders.Domain.Aggregates.Order
             {
                 // TODO
                 var ex = new Exception();
-                return new OperationResult<Order>(ex);
+                return OperationResult<Order>.Failed(ex);
             }
 
             var order = new Order()
@@ -69,7 +69,7 @@ namespace Orders.Domain.Aggregates.Order
 
             order.AddDomainEvent(new OrderDraftCreatedDomainEvent(order));
 
-            return new OperationResult<Order>(order);
+            return OperationResult<Order>.Success(order);
         }
     }
 }

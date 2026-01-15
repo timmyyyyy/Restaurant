@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurant.Common.FlowBuildingBlocks
 {
@@ -15,9 +11,9 @@ namespace Restaurant.Common.FlowBuildingBlocks
     public readonly struct OperationResult
     {
         internal readonly OperationResultState state;
-        readonly Exception exception;
+        internal readonly Exception exception;
 
-        public OperationResult(OperationResultState state, Exception exception)
+        internal OperationResult(OperationResultState state, Exception exception)
         {
             this.state = state;
             this.exception = exception;
@@ -26,27 +22,43 @@ namespace Restaurant.Common.FlowBuildingBlocks
 
     public readonly struct OperationResult<T>
     {
-        internal readonly OperationResultState state;
-        internal readonly T value; 
+        readonly OperationResultState state;
+        readonly T value; 
         readonly Exception exception;
 
-        public OperationResult(T val)
+        private OperationResult(T val)
         {
             value = val;
             state = OperationResultState.Success;
             exception = null!;
         }
 
-        public OperationResult(Exception ex)
+        private OperationResult(Exception ex)
         {
             value = default(T)!;
             state = OperationResultState.Failed;
             exception = ex;
         }
 
+        internal OperationResult(OperationResultState state, Exception ex)
+        {
+            this.state = state;
+            exception = ex;
+            value = default(T)!;
+        }
+
+        public static OperationResult<T> Success(T val) => new OperationResult<T>(val);
+
+        public static OperationResult<T> Failed(Exception ex) => new OperationResult<T>(ex); 
+
         public static implicit operator OperationResult(OperationResult<T> operationResult)
         {
             return new OperationResult(operationResult.state, operationResult.exception);
+        }
+
+        public static implicit operator OperationResult<T>(OperationResult operationResult)
+        {
+            return new OperationResult<T>(operationResult.state, operationResult.exception);
         }
 
         public bool IsSuccess => state == OperationResultState.Success;

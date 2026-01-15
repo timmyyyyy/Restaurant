@@ -52,7 +52,7 @@ namespace Orders.Application.Commands
         public Guid OrderId { get; init; } = orderId;
     }
 
-    public class CreateOrderDraftCommandHandler(IMediator mediator, IPublishEndpoint publishEndpoint,
+    public class CreateOrderDraftCommandHandler(IPublishEndpoint publishEndpoint,
         IDomainEventCollector domainEventCollector, OrdersDbContext dbContext) 
         : IRequestHandler<CreateOrderDraftCommand, CreateOrderDraftCommandResponse>
     {
@@ -65,8 +65,6 @@ namespace Orders.Application.Commands
 
             var order = orderResult.Value;
             domainEventCollector.Add(order.DomainEvents);
-
-            //await mediator.DispatchDomainEvents(order, cancellationToken);
 
             var orderDto = (OrderDto)order;
             var orderReceivedIntegrationEvent = new OrderReceivedIntegrationEvent(orderDto);

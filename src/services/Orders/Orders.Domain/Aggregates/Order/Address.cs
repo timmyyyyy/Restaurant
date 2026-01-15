@@ -32,11 +32,11 @@ namespace Orders.Domain.Aggregates.Order
             {
                 // TODO
                 var exception = new Exception();
-                return new OperationResult<Address>(exception);
+                return OperationResult<Address>.Failed(exception);
             }
 
             var address = new Address(input.PostCode, input.City, input.Street, input.BuildingNumber, input.FlatNumber);
-            return new OperationResult<Address>(address);
+            return OperationResult<Address>.Success(address);
         }
     }
 }

@@ -22,9 +22,9 @@ namespace Restaurant.Infrastructure.Repositories
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             if (menu == null)
-                return new OperationResult<Menu>(new PersistenceException(Consts.ExceptionMessages.NOT_FOUND));
+                return OperationResult<Menu>.Failed(new PersistenceException(Consts.ExceptionMessages.NOT_FOUND));
 
-            return new OperationResult<Menu>((Menu)menu);
+            return OperationResult<Menu>.Success((Menu)menu);
         }
 
         public async Task<OperationResult<IEnumerable<Menu>>> GetMenus(IEnumerable<Guid> ids)
@@ -38,7 +38,7 @@ namespace Restaurant.Infrastructure.Repositories
                 .Where(x => ids.Contains(x.Id))
                 .ToListAsync();
 
-            return new OperationResult<IEnumerable<Menu>>(
+            return OperationResult<IEnumerable<Menu>>.Success(
                 menus.Select(x => new Menu()
                 {
                     Id = x.Id,
