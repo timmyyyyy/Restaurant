@@ -6,7 +6,7 @@ using Orders.Infrastructure.Models;
 
 namespace Orders.Application.StateMachines.Activities
 {
-    public class OrderPaidActivity : IStateMachineActivity<OrderDbEntity, PaymentConfirmedIntegrationEvent>
+    public class OrderPaidActivity : IStateMachineActivity<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent>
     {
         private readonly OrdersDbContext _ordersDbContext;
 
@@ -15,7 +15,7 @@ namespace Orders.Application.StateMachines.Activities
             _ordersDbContext = ordersDbContext;
         }
 
-        public async Task Execute(BehaviorContext<OrderDbEntity, PaymentConfirmedIntegrationEvent> context, IBehavior<OrderDbEntity, PaymentConfirmedIntegrationEvent> next)
+        public async Task Execute(BehaviorContext<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent> context, IBehavior<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent> next)
         {
             // TODO get order details based on order id from payment service
             // then publish validation command
@@ -28,7 +28,7 @@ namespace Orders.Application.StateMachines.Activities
 
         public void Accept(StateMachineVisitor visitor) => visitor.Visit(this);
 
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderDbEntity, PaymentConfirmedIntegrationEvent, TException> context, IBehavior<OrderDbEntity, PaymentConfirmedIntegrationEvent> next) where TException : Exception
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent, TException> context, IBehavior<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent> next) where TException : Exception
             => next.Faulted(context);
 
         public void Probe(ProbeContext context) { }

@@ -1,9 +1,12 @@
 ﻿using Orders.Domain.Aggregates.Order;
+using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
 
 namespace Orders.Infrastructure.Models
 {
-    public class AddressDbEntity
+    public class AddressDbEntity : BaseDbEntity
     {
+        public AddressDbEntity() { }
+
         public AddressDbEntity(string postCode, string city, string street, string buildingNumber, string? flatNumber)
         {
             PostCode = postCode;

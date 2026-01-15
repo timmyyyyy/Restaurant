@@ -1,7 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Orders.Application;
-using Orders.Domain.StateMachines;
+using Orders.Application.StateMachines;
 using Orders.Infrastructure;
 using Orders.Infrastructure.Models;
 using Restaurant.Common.InfrastructureBuildingBlocks;
@@ -14,13 +15,18 @@ namespace Orders.API.Infrastructure.Extensions
     {
         public static WebApplicationBuilder AddDbConfiguration(this WebApplicationBuilder builder)
         {
-            builder.Services.AddDbContext<OrdersDbContext>(options =>
+            builder.Services.AddScoped<SaveChangesInterceptor, DomainEventPublisherInterceptor>();
+
+            builder.Services.AddDbContext<OrdersDbContext>((sp, options) =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("Default");
                 options.UseSqlServer(connectionString, builder =>
                 {
                     builder.MigrationsAssembly(typeof(InfrastructureMarker).Assembly.FullName);
                 });
+
+                var interceptors = sp.GetRequiredService<SaveChangesInterceptor>();
+                options.AddInterceptors(interceptors);
             });
 
             builder.Services.AddHostedService<MigrationsHostedService<OrdersDbContext>>();
@@ -34,7 +40,7 @@ namespace Orders.API.Infrastructure.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
-                x.AddSagaStateMachine<OrderStateMachine, OrderDbEntity>()
+                x.AddSagaStateMachine<OrderStateMachine, OrderSagaStateDbEntity>()
                     .EntityFrameworkRepository(x =>
                     {
                         // TODO concurrency mode

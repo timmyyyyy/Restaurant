@@ -37,33 +37,27 @@ namespace Orders.Application.Dtos
             };
         }
 
-        public static explicit operator OrderDbEntity (OrderDto order)
-        {
-            return new()
-            {
-                CorrelationId = order.Id,
-                EmailAddress = order.EmailAddress,
-                PhoneNumber = order.PhoneNumber,
-                RestaurantId = order.RestaurantId,
-                MenuItemsIds = order.MenuItemsIds,
-                PaymentOnDelivery = order.PaymentOnDelivery,
-                DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
-                CustomerId = order.CustomerId,
-            };
-        }
+        //public static explicit operator OrderSagaStateDbEntity (OrderDto order)
+        //{
+        //    return new()
+        //    {
+        //        CorrelationId = order.Id,
+        //        EmailAddress = order.EmailAddress,
+        //        PhoneNumber = order.PhoneNumber,
+        //        RestaurantId = order.RestaurantId,
+        //        MenuItemsIds = order.MenuItemsIds,
+        //        PaymentOnDelivery = order.PaymentOnDelivery,
+        //        DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
+        //        CustomerId = order.CustomerId,
+        //    };
+        //}
 
-        public static explicit operator OrderDto(OrderDbEntity order)
+        public static explicit operator OrderDto(OrderSagaStateDbEntity order)
         {
             return new()
             {
                 Id = order.CorrelationId,
-                EmailAddress = order.EmailAddress,
-                PhoneNumber = order.PhoneNumber,
-                RestaurantId = order.RestaurantId,
-                MenuItemsIds = order.MenuItemsIds,
                 PaymentOnDelivery = order.PaymentOnDelivery,
-                DeliveryAddress = (AddressDto)order.DeliveryAddress,
-                CustomerId = order.CustomerId,
             };
         }
     }

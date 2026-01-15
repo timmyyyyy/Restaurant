@@ -1,15 +1,16 @@
-﻿using MassTransit;
-using Orders.Domain.Aggregates.Order;
+﻿using Orders.Domain.Aggregates.Order;
 using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Orders.Infrastructure.Models
 {
-    public class OrderDbEntity : BaseDbEntity, SagaStateMachineInstance
+    public class OrderDbEntity : BaseDbEntity
     {
-        // TODO optimistic concurrency field with version
-        public Guid CorrelationId { get; set; }
-
-        public string CurrentState { get; set; }
+        public OrderStatus Status { get; set; }
 
         public string? EmailAddress { get; set; }
 
@@ -25,22 +26,18 @@ namespace Orders.Infrastructure.Models
 
         public bool PaymentOnDelivery { get; set; }
 
-        public Guid CreatedBy { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        public Guid? UpdatedBy { get; set; }
-
-        public DateTime? UpdatedDate { get; set; }
-
-        //public static explicit operator OrderDbEntity(Order order) 
-        //    => new OrderDbEntity()
-        //    {
-        //        Id = order.Id,
-        //        EmailAddress = order.EmailAddress,
-        //        DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
-        //        PaymentOnDelivery = order.PaymentOnDelivery,
-        //        d
-        //    }
+        public static implicit operator OrderDbEntity(Order order) =>
+            new OrderDbEntity()
+            {
+                Id = order.Id,
+                Status = order.Status,
+                EmailAddress = order.EmailAddress,
+                PhoneNumber = order.PhoneNumber,
+                CustomerId = order.CustomerId,
+                RestaurantId = order.RestaurantId,
+                DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
+                MenuItemsIds = order.MenuItemsIds,
+                PaymentOnDelivery = order.PaymentOnDelivery,
+            };
     }
 }

@@ -13,7 +13,7 @@ namespace Orders.Infrastructure
         {
         }
 
-        public DbSet<OrderDbEntity> Orders { get; set; }
+        public DbSet<OrderSagaStateDbEntity> Orders { get; set; }
 
         public DbSet<AddressDbEntity> Adresses { get; set; }
 

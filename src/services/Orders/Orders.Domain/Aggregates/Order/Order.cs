@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using Orders.Domain.Aggregates.Order.DomainEvents;
+using Orders.Domain.Aggregates.Order.Parameters;
 using Restaurant.Common.DomainBuildingBlocks;
 using Restaurant.Common.FlowBuildingBlocks;
 
@@ -29,17 +31,25 @@ namespace Orders.Domain.Aggregates.Order
 
         public bool PaymentOnDelivery { get; init; }
 
-        public static OperationResult<Order> CreateOrder(string? emailAddress, string? phoneNumber, Guid? customerId,
-            Guid restaurantId, Address deliveryAddress, List<Guid> menuItemsIds, bool paymentOnDelivery)
+        public static OperationResult<Order> CreateOrder(OrderCreationParams input)
         {
-            if ((string.IsNullOrEmpty(emailAddress) || string.IsNullOrEmpty(phoneNumber)) && customerId == null)
+            if ((string.IsNullOrEmpty(input.EmailAddress) || string.IsNullOrEmpty(input.PhoneNumber)) && input.CustomerId == null)
             {
                 // TODO
                 var ex = new Exception();
                 return new OperationResult<Order>(ex);
             }
 
-            if ((!string.IsNullOrEmpty(emailAddress) || !string.IsNullOrEmpty(phoneNumber) && customerId != null))
+            if ((!string.IsNullOrEmpty(input.EmailAddress) || !string.IsNullOrEmpty(input.PhoneNumber) && input.CustomerId != null))
+            {
+                // TODO
+                var ex = new Exception();
+                return new OperationResult<Order>(ex);
+            }
+
+            var addressResult = Address.CreateAddress(input.AddressCreationParams);
+
+            if (!addressResult.IsSuccess)
             {
                 // TODO
                 var ex = new Exception();
@@ -48,13 +58,13 @@ namespace Orders.Domain.Aggregates.Order
 
             var order = new Order()
             {
-                EmailAddress = emailAddress,
-                PhoneNumber = phoneNumber,
-                CustomerId = customerId,
-                DeliveryAddress = deliveryAddress,
-                MenuItemsIds = menuItemsIds,
-                RestaurantId = restaurantId,
-                PaymentOnDelivery = paymentOnDelivery
+                EmailAddress = input.EmailAddress,
+                PhoneNumber = input.PhoneNumber,
+                CustomerId = input.CustomerId,
+                MenuItemsIds = input.MenuItemsIds,
+                RestaurantId = input.RestaurantId,
+                PaymentOnDelivery = input.PaymentOnDelivery,
+                DeliveryAddress = addressResult.Value
             };
 
             order.AddDomainEvent(new OrderDraftCreatedDomainEvent(order));

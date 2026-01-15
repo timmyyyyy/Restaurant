@@ -7,11 +7,11 @@ using Orders.Domain.Aggregates.Order;
 using Orders.Domain.Aggregates.Order.DomainEvents;
 using Orders.Infrastructure.Models;
 
-using OrderDbEntity = Orders.Infrastructure.Models.OrderDbEntity;
+using OrderSagaStateDbEntity = Orders.Infrastructure.Models.OrderSagaStateDbEntity;
 
 namespace Orders.Application.StateMachines
 {
-    public class OrderStateMachine : MassTransitStateMachine<OrderDbEntity>
+    public class OrderStateMachine : MassTransitStateMachine<OrderSagaStateDbEntity>
     {
         public OrderStateMachine()
         {
@@ -118,16 +118,16 @@ namespace Orders.Application.StateMachines
         public State Completed { get; private set; }
         public State NotDelivered { get; private set; }
 
-        private EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> PassToValidation(
-            EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> binder)
+        private EventActivityBinder<OrderSagaStateDbEntity, OrderReceivedIntegrationEvent> PassToValidation(
+            EventActivityBinder<OrderSagaStateDbEntity, OrderReceivedIntegrationEvent> binder)
         {
             return binder
                 .Publish(ctx => new PassOrderToValidationCommand((OrderDto)ctx.Saga))
                 .TransitionTo(DuringValidation);
         }
 
-        private EventActivityBinder<OrderDbEntity, T> ProcessPaymentRefund<T>(
-            EventActivityBinder<OrderDbEntity, T> binder)
+        private EventActivityBinder<OrderSagaStateDbEntity, T> ProcessPaymentRefund<T>(
+            EventActivityBinder<OrderSagaStateDbEntity, T> binder)
             where T: class, IBaseOrderMessage
         {
             return binder
@@ -138,36 +138,31 @@ namespace Orders.Application.StateMachines
 
     public static class OrderStateMachineActivityExtensions
     {
-        public static EventActivityBinder<OrderDbEntity, OrderValidatedSuccessfullyIntegrationEvent> ProcessForAcceptance
-            (this EventActivityBinder<OrderDbEntity, OrderValidatedSuccessfullyIntegrationEvent> binder)
+        public static EventActivityBinder<OrderSagaStateDbEntity, OrderValidatedSuccessfullyIntegrationEvent> ProcessForAcceptance
+            (this EventActivityBinder<OrderSagaStateDbEntity, OrderValidatedSuccessfullyIntegrationEvent> binder)
         {
             return binder.PublishAsync(ctx => ctx.Init<PassOrderToAcceptanceCommand>(new { }));
         }
 
-        public static EventActivityBinder<OrderDbEntity, PaymentConfirmedIntegrationEvent> PassToValidation
-            (this EventActivityBinder<OrderDbEntity, PaymentConfirmedIntegrationEvent> binder)
+        public static EventActivityBinder<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent> PassToValidation
+            (this EventActivityBinder<OrderSagaStateDbEntity, PaymentConfirmedIntegrationEvent> binder)
         {
             return binder.Publish(ctx => new PassOrderToValidationCommand((OrderDto)ctx.Saga));
         }
 
-        public static EventActivityBinder<OrderDbEntity, OrderReadyIntegrationEvent> PassToDelivery
-            (this EventActivityBinder<OrderDbEntity, OrderReadyIntegrationEvent> binder)
+        public static EventActivityBinder<OrderSagaStateDbEntity, OrderReadyIntegrationEvent> PassToDelivery
+            (this EventActivityBinder<OrderSagaStateDbEntity, OrderReadyIntegrationEvent> binder)
         {
             return binder.PublishAsync(ctx => ctx.Init<PassOrderToDeliveryCommand>(new { }));
         }
 
-        public static EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> InitProcessManager
-            (this EventActivityBinder<OrderDbEntity, OrderReceivedIntegrationEvent> binder)
+        public static EventActivityBinder<OrderSagaStateDbEntity, OrderReceivedIntegrationEvent> InitProcessManager
+            (this EventActivityBinder<OrderSagaStateDbEntity, OrderReceivedIntegrationEvent> binder)
         {
             return binder.Then(x =>
             {
                 x.Saga.CorrelationId = x.Message.Order.Id;
-                x.Saga.PhoneNumber = x.Message.Order.PhoneNumber;
-                x.Saga.EmailAddress = x.Message.Order.EmailAddress;
-                x.Saga.RestaurantId = x.Message.Order.RestaurantId;
-                x.Saga.CustomerId = x.Message.Order.CustomerId;
-                x.Saga.DeliveryAddress = (AddressDbEntity)x.Message.Order.DeliveryAddress;
-                x.Saga.MenuItemsIds = x.Message.Order.MenuItemsIds;
+                x.Saga.PaymentOnDelivery = x.Message.Order.PaymentOnDelivery;
             });
         }
     }

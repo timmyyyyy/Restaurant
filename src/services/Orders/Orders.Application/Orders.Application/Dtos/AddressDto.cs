@@ -29,14 +29,7 @@ namespace Orders.Application.Dtos
 
         public static explicit operator AddressDbEntity (AddressDto address)
         {
-            return new()
-            {
-                PostCode = address.PostCode,
-                City = address.City,
-                Street = address.Street,
-                BuildingNumber = address.BuildingNumber,
-                FlatNumber = address.FlatNumber
-            };
+            return new AddressDbEntity(address.PostCode, address.City, address.Street, address.BuildingNumber, address.FlatNumber);
         }
 
         public static explicit operator AddressDto(AddressDbEntity address)

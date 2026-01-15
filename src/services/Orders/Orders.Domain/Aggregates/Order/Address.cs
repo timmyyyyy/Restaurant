@@ -1,4 +1,5 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
+﻿using Orders.Domain.Aggregates.Order.Parameters;
+using Restaurant.Common.DomainBuildingBlocks;
 using Restaurant.Common.FlowBuildingBlocks;
 
 namespace Orders.Domain.Aggregates.Order
@@ -24,18 +25,17 @@ namespace Orders.Domain.Aggregates.Order
 
         public string? FlatNumber { get; init; }
 
-        public static OperationResult<Address> CreateAddress(string postCode, string city, string street,
-            string buildingNumber, string? flatNumber)
+        internal static OperationResult<Address> CreateAddress(AddressCreationParams input)
         {
-            if (string.IsNullOrEmpty(postCode) || string.IsNullOrEmpty(city) || 
-                string.IsNullOrEmpty(street) || string.IsNullOrEmpty(buildingNumber))
+            if (string.IsNullOrEmpty(input.PostCode) || string.IsNullOrEmpty(input.City) || 
+                string.IsNullOrEmpty(input.Street) || string.IsNullOrEmpty(input.BuildingNumber))
             {
                 // TODO
                 var exception = new Exception();
                 return new OperationResult<Address>(exception);
             }
 
-            var address = new Address(postCode, city, street, buildingNumber, flatNumber);
+            var address = new Address(input.PostCode, input.City, input.Street, input.BuildingNumber, input.FlatNumber);
             return new OperationResult<Address>(address);
         }
     }

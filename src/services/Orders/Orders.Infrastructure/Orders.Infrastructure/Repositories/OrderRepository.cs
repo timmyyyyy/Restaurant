@@ -1,4 +1,5 @@
 ﻿using Orders.Domain.Aggregates.Order;
+using Orders.Infrastructure.Models;
 using Restaurant.Common.InfrastructureBuildingBlocks.DI;
 
 namespace Orders.Infrastructure.Repositories
@@ -12,9 +13,11 @@ namespace Orders.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task AddOrder(Order order)
+        public async Task AddOrder(Order order)
         {
-            throw new NotImplementedException();
+            var orderDbEntity = (OrderDbEntity)order;
+
+            await _context.AddAsync(orderDbEntity);
         }
     }
 }
