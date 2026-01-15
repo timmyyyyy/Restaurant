@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\Restaurant.ServiceDefaults\Restaurant.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

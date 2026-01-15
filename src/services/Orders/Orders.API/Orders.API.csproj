@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
     <ProjectReference Include="..\Orders.Application\Orders.Application\Orders.Application.csproj" />
     <ProjectReference Include="..\Orders.Domain\Orders.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\Restaurant.ServiceDefaults\Restaurant.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

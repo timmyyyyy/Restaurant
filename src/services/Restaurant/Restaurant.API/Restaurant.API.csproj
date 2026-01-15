@@ -28,6 +28,7 @@
     <ProjectReference Include="..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
     <ProjectReference Include="..\Restaurant.Application\Restaurant.Application\Restaurant.Application.csproj" />
     <ProjectReference Include="..\Restaurant.Infrastructure\Restaurant.Infrastructure\Restaurant.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\..\Restaurant.ServiceDefaults\Restaurant.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>

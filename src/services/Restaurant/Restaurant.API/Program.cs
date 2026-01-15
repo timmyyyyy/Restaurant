@@ -1,7 +1,8 @@
 using Restaurant.API.Infrastructure.Extensions;
-using Restaurant.Common.InfrastructureBuildingBlocks.Telemetry;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 
@@ -13,9 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.AddDbConfiguration();
 builder.AddMassTransitConfiguration();
 
-builder.Services.AddOpenTelemetry("Restaurant");
-
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -29,7 +30,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseOpenTelemetry();
 
 app.Run();

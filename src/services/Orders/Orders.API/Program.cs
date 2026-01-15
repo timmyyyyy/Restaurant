@@ -3,10 +3,11 @@ using System.Reflection;
 using Restaurant.Common.InfrastructureBuildingBlocks.DI;
 using Orders.Application;
 using Orders.Infrastructure;
-using Restaurant.Common.InfrastructureBuildingBlocks.Telemetry;
 using Restaurant.Common;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 
@@ -22,11 +23,11 @@ builder.AddMassTransitConfiguration();
 
 builder.AddDbConfiguration();
 
-builder.Services.AddOpenTelemetry("Orders");
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>());
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,7 +42,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseOpenTelemetry();
 
 app.Run();

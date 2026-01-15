@@ -15,10 +15,16 @@ namespace Restaurant.API.Infrastructure.Extensions
         {
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
             {
-                var connectionString = builder.Configuration.GetConnectionString("Default");
-                options.UseSqlServer(connectionString, builder =>
+                var connectionString = builder.Configuration.GetConnectionString("RestaurantDb") 
+                    ?? builder.Configuration.GetConnectionString("Default");
+                    
+                options.UseSqlServer(connectionString, sqlOptions =>
                 {
-                    builder.MigrationsAssembly(typeof(InfrastructureMarker).Assembly.FullName);
+                    sqlOptions.MigrationsAssembly(typeof(InfrastructureMarker).Assembly.FullName);
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null);
                 });
             });
 
@@ -42,6 +48,12 @@ namespace Restaurant.API.Infrastructure.Extensions
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
+                    cfg.Host("localhost", "/", h =>
+                    {
+                        h.Username("admin");
+                        h.Password("admin123");
+                    });
+                    
                     cfg.ConfigureEndpoints(context);
                 });
 

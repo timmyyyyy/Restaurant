@@ -1,0 +1,23 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\services\Orders\Orders.API\Orders.API.csproj" />
+    <ProjectReference Include="..\src\services\Restaurant\Restaurant.API\Restaurant.API.csproj" />
+    <ProjectReference Include="..\src\services\Delivery\Delivery.API\Delivery.API.csproj" />
+    <ProjectReference Include="..\src\services\Payments\Payments.API\Payments.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.1.0" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.1.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>c98e3230-f93f-4c3f-9e22-820efbcea8f5</UserSecretsId>
+  </PropertyGroup>
+
+</Project>
