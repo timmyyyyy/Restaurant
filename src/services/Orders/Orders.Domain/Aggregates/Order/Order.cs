@@ -40,7 +40,7 @@ namespace Orders.Domain.Aggregates.Order
                 return new OperationResult<Order>(ex);
             }
 
-            if ((!string.IsNullOrEmpty(input.EmailAddress) || !string.IsNullOrEmpty(input.PhoneNumber) && input.CustomerId != null))
+            if ((!string.IsNullOrEmpty(input.EmailAddress) || !string.IsNullOrEmpty(input.PhoneNumber)) && input.CustomerId != null)
             {
                 // TODO
                 var ex = new Exception();

@@ -4,6 +4,8 @@ namespace Restaurant.IntegrationMessages
 {
     public record PassOrderToValidationCommand
     {
+        public PassOrderToValidationCommand() { }
+
         public PassOrderToValidationCommand(OrderDto order)
         {
             Order = order;

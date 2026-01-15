@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="9.0.0" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="9.0.0" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="9.0.0" />
+    <PackageReference Include="MassTransit" Version="8.2.5" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.5" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
@@ -28,6 +28,10 @@
     <ProjectReference Include="..\..\..\common\Restaurant.Common\Restaurant.Common.csproj" />
     <ProjectReference Include="..\Restaurant.Application\Restaurant.Application\Restaurant.Application.csproj" />
     <ProjectReference Include="..\Restaurant.Infrastructure\Restaurant.Infrastructure\Restaurant.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

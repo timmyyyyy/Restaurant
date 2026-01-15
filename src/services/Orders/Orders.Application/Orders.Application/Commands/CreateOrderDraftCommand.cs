@@ -4,6 +4,7 @@ using MediatR;
 using Orders.Application.Dtos;
 using Orders.Domain.Aggregates.Order;
 using Orders.Domain.Aggregates.Order.Parameters;
+using Orders.Infrastructure;
 using Restaurant.Common.ApplicationBuildingBlocks;
 using Restaurant.Common.DomainBuildingBlocks;
 using Restaurant.IntegrationMessages;
@@ -46,29 +47,15 @@ namespace Orders.Application.Commands
             };
     }
 
-    public class CreateOrderDraftCommandResponse
+    public class CreateOrderDraftCommandResponse(Guid orderId)
     {
-        public CreateOrderDraftCommandResponse(Guid orderId)
-        {
-            OrderId = orderId;
-        }
-
-        public Guid OrderId { get; init; }
+        public Guid OrderId { get; init; } = orderId;
     }
 
-    public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, CreateOrderDraftCommandResponse>
+    public class CreateOrderDraftCommandHandler(IMediator mediator, IPublishEndpoint publishEndpoint,
+        IDomainEventCollector domainEventCollector, OrdersDbContext dbContext) 
+        : IRequestHandler<CreateOrderDraftCommand, CreateOrderDraftCommandResponse>
     {
-        private readonly IMediator _mediator;
-        private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IDomainEventCollector _domainEventCollector;
-
-        public CreateOrderDraftCommandHandler(IMediator mediator, IPublishEndpoint publishEndpoint, IDomainEventCollector domainEventCollector)
-        {
-            _mediator = mediator;
-            _publishEndpoint = publishEndpoint;
-            _domainEventCollector = domainEventCollector;
-        }
-
         public async Task<CreateOrderDraftCommandResponse> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
         {
             // TODO get from the httpContext after auth
@@ -77,13 +64,15 @@ namespace Orders.Application.Commands
             // TODO check if orderResult failed
 
             var order = orderResult.Value;
-            _domainEventCollector.Add(order.DomainEvents);
+            domainEventCollector.Add(order.DomainEvents);
 
-            //await _mediator.DispatchDomainEvents(order, cancellationToken);
+            //await mediator.DispatchDomainEvents(order, cancellationToken);
 
             var orderDto = (OrderDto)order;
             var orderReceivedIntegrationEvent = new OrderReceivedIntegrationEvent(orderDto);
-            await _publishEndpoint.Publish(orderReceivedIntegrationEvent, cancellationToken);
+            await publishEndpoint.Publish(orderReceivedIntegrationEvent, cancellationToken);
+
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             // TODO
             return new CreateOrderDraftCommandResponse(orderResult.Value.Id);

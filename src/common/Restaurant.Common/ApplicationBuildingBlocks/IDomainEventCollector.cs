@@ -13,16 +13,9 @@ namespace Restaurant.Common.ApplicationBuildingBlocks
         Task Dispatch();
     }
 
-    public sealed class DomainEventCollector : IDomainEventCollector
+    public sealed class DomainEventCollector(IMediator mediator) : IDomainEventCollector
     {
-        private readonly List<INotification> _domainEvents;
-
-        private readonly IMediator _mediator;
-
-        public DomainEventCollector(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly List<INotification> _domainEvents = new();
 
         public void Add(IEnumerable<INotification> domainEvents)
         {
@@ -33,7 +26,7 @@ namespace Restaurant.Common.ApplicationBuildingBlocks
         {
             foreach (var domainEvent in _domainEvents)
             {
-                await _mediator.Publish(domainEvent);
+                await mediator.Publish(domainEvent);
             }
 
             _domainEvents.Clear();

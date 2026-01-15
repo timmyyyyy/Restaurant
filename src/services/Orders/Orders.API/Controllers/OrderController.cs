@@ -6,19 +6,12 @@ namespace Orders.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    public class OrderController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public OrderController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDraftCommand command)
         {
-            var response = await _mediator.Send(command);
+            var response = await mediator.Send(command);
 
             // TODO
 

@@ -9,18 +9,11 @@ using Restaurant.Domain.Aggregates.Menu;
 namespace Restaurant.Infrastructure.Repositories
 {
     // TODO cancellation tokens
-    public class MenuRepository : IMenuRepository
+    public class MenuRepository(RestaurantDbContext context) : IMenuRepository
     {
-        private readonly RestaurantDbContext _context;
-
-        public MenuRepository(RestaurantDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OperationResult<Menu>> GetMenu(Guid id)
         {
-            var menu = await _context.Menus
+            var menu = await context.Menus
                 .AsNoTracking()
                 .Include(x => x.Items)
                     .ThenInclude(x => x.Availability)
@@ -36,7 +29,7 @@ namespace Restaurant.Infrastructure.Repositories
 
         public async Task<OperationResult<IEnumerable<Menu>>> GetMenus(IEnumerable<Guid> ids)
         {
-            var menus = await _context.Menus
+            var menus = await context.Menus
                 .AsNoTracking()
                 .Include(x => x.Items)
                     .ThenInclude(x => x.Availability)
