@@ -40,7 +40,6 @@ namespace Restaurant.Common.InfrastructureBuildingBlocks.Telemetry
                             o.EnableConnectionLevelAttributes = true;
                             o.RecordException = true;
                             o.SetDbStatementForText = true;
-                            o.SetDbStatementForStoredProcedure = true;
                         })
                         .AddOtlpExporter(o =>
                         {
