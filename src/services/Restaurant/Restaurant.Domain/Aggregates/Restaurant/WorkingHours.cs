@@ -1,14 +1,11 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Domain.Aggregates.Restaurant
+namespace Restaurant.Domain.Aggregates.Restaurant;
+
+public sealed record WorkingHours : ValueObject
 {
-    public sealed class WorkingHours : ValueObject
-    {
-        public TimeOnly Start { get; init; }
+    public TimeOnly Start { get; init; }
 
-        public TimeOnly End { get; init; }
-    }
+    public TimeOnly End { get; init; }
 }

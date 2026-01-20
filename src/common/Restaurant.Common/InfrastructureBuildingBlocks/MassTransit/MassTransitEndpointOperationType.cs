@@ -1,7 +1,6 @@
-﻿namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit
+namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
+
+public enum MassTransitEndpointOperationType
 {
-    public enum MassTransitEndpointOperationType
-    {
-        Activity,
-    }
+    Activity,
 }

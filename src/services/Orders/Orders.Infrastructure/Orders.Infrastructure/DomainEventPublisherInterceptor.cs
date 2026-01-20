@@ -1,30 +1,23 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Restaurant.Common.ApplicationBuildingBlocks;
 
-namespace Orders.Infrastructure
+namespace Orders.Infrastructure;
+
+public class DomainEventPublisherInterceptor(IDomainEventCollector domainEventCollector) : SaveChangesInterceptor
 {
-    public class DomainEventPublisherInterceptor : SaveChangesInterceptor
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
+        InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        private readonly IDomainEventCollector _domainEventCollector;
+        var isSagaOperation = eventData?.Context?.ChangeTracker?.Entries<SagaStateMachineInstance>()?.Count() > 0;
 
-        public DomainEventPublisherInterceptor(IDomainEventCollector domainEventCollector)
+        if (!isSagaOperation)
         {
-            _domainEventCollector = domainEventCollector;
-        }
-
-        public async override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
-        {
-            var isSagaOperation = eventData?.Context?.ChangeTracker?.Entries<SagaStateMachineInstance>()?.Count() > 0;
-
-            if (!isSagaOperation)
-            {
-                return result;
-            }
-
-            await _domainEventCollector.Dispatch();
-
             return result;
         }
+
+        await domainEventCollector.Dispatch(cancellationToken);
+
+        return result;
     }
 }

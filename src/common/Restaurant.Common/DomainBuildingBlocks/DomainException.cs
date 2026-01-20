@@ -1,11 +1,7 @@
-﻿using System;
+using System;
 
-namespace Restaurant.Common.DomainBuildingBlocks
+namespace Restaurant.Common.DomainBuildingBlocks;
+
+public class DomainException(string? message) : Exception(message)
 {
-    public class DomainException : Exception
-    {
-        public DomainException(string? message) : base(message)
-        {
-        }
-    }
 }

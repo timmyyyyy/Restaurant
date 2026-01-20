@@ -1,18 +1,18 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Domain.Aggregates.Restaurant
+namespace Restaurant.Domain.Aggregates.Restaurant;
+
+public sealed class Restaurant : AggregateRoot
 {
-    public sealed class Restaurant : AggregateRoot
-    {
-        public IEnumerable<Guid> MenuIds { get; init; }
+    internal Restaurant() : base() { }
 
-        public string Name { get; init; }
+    public required IEnumerable<Guid> MenuIds { get; init; }
 
-        public Address Address { get; init; }
+    public required string Name { get; init; }
 
-        public WorkingSchedule WorkingSchedule { get; init; }
-    }
+    public required Address Address { get; init; }
+
+    public required WorkingSchedule WorkingSchedule { get; init; }
 }

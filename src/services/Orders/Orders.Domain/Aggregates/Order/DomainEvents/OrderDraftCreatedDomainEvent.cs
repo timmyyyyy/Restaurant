@@ -1,14 +1,13 @@
-﻿using MediatR;
+using MediatR;
 
-namespace Orders.Domain.Aggregates.Order.DomainEvents
+namespace Orders.Domain.Aggregates.Order.DomainEvents;
+
+public class OrderDraftCreatedDomainEvent : INotification
 {
-    public class OrderDraftCreatedDomainEvent : INotification
+    public OrderDraftCreatedDomainEvent(Order order)
     {
-        public OrderDraftCreatedDomainEvent(Order order)
-        {
-            Order = order;
-        }
-
-        public Order Order { get; private set; }
+        Order = order;
     }
+
+    public Order Order { get; private set; }
 }

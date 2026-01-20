@@ -1,11 +1,10 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
+using Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes
+namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
+
+public abstract record MenuItemAvailability : ValueObject
 {
-    public abstract class MenuItemAvailability : ValueObject
-    {
-        public abstract MenuItemAvailabilityType MenuItemAvailabilityType { get; }
+    public abstract MenuItemAvailabilityType MenuItemAvailabilityType { get; }
 
-        public abstract bool IsCurrentlyAvailable();
-    }
+    public abstract bool IsCurrentlyAvailable();
 }

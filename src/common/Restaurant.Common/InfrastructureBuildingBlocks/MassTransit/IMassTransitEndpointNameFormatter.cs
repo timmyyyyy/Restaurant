@@ -1,7 +1,6 @@
-﻿namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit
+namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
+
+public interface IMassTransitEndpointNameFormatter
 {
-    public interface IMassTransitEndpointNameFormatter
-    {
-        string FormatName(string name, MassTransitEndpointOperationType operationType);
-    }
+    string FormatName(string name, MassTransitEndpointOperationType operationType);
 }

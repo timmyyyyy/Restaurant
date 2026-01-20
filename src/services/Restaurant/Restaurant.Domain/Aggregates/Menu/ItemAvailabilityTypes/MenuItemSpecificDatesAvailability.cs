@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes
+namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
+
+public sealed record MenuItemSpecificDatesAvailability : MenuItemAvailability
 {
-    public sealed class MenuItemSpecificDatesAvailability : MenuItemAvailability
-    {
-        internal MenuItemSpecificDatesAvailability() { }
+    internal MenuItemSpecificDatesAvailability() { }
 
-        public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.SpecificDates;
+    public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.SpecificDates;
 
-        public List<DateOnly> SpecificDates { get; init; }
+    public required List<DateOnly> SpecificDates { get; init; }
 
-        public override bool IsCurrentlyAvailable() => SpecificDates.Contains(DateOnly.FromDateTime(DateTime.UtcNow));
-    }
+    public override bool IsCurrentlyAvailable() => SpecificDates.Contains(DateOnly.FromDateTime(DateTime.UtcNow));
 }

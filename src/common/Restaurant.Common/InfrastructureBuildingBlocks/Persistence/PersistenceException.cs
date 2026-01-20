@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 
-namespace Restaurant.Common.InfrastructureBuildingBlocks.Persistence
+namespace Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+
+public class PersistenceException : Exception
 {
-    public class PersistenceException : Exception
+    public PersistenceException(string? message) : base(message)
     {
-        public PersistenceException(string? message) : base(message)
-        {
-        }
     }
 }

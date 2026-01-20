@@ -1,24 +1,25 @@
-﻿using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
 using Restaurant.Domain.Aggregates.Menu;
 
-namespace Restaurant.Infrastructure.Models
+namespace Restaurant.Infrastructure.Models;
+
+public class MenuDbEntity : BaseDbEntitySoftDeletable
 {
-    public class MenuDbEntity : BaseDbEntitySoftDeletable
-    {
-        public string Name { get; set; }
+    internal MenuDbEntity() { }
 
-        public RestaurantDbEntity Restaurant { get; set; }
+    public required string Name { get; set; }
 
-        public Guid RestaurantId { get; set; }
+    public required RestaurantDbEntity Restaurant { get; set; }
 
-        public IEnumerable<MenuItemDbEntity> Items { get; set; }
+    public Guid RestaurantId { get; set; }
 
-        public static explicit operator Menu(MenuDbEntity entity)
-            => new()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Items = entity.Items.Select(x => (MenuItem)x)
-            };
-    }
+    public required IEnumerable<MenuItemDbEntity> Items { get; set; }
+
+    public static explicit operator Menu(MenuDbEntity entity)
+        => new()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Items = entity.Items.Select(x => (MenuItem)x)
+        };
 }

@@ -1,7 +1,6 @@
-﻿namespace Restaurant.IntegrationMessages
+namespace Restaurant.IntegrationMessages;
+
+public record PaymentRefundedIntegrationEvent
 {
-    public record PaymentRefundedIntegrationEvent
-    {
-        public Guid OrderId { get; init; }
-    }
+    public Guid OrderId { get; init; }
 }

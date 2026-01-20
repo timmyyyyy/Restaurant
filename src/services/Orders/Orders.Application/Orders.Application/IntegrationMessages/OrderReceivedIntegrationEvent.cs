@@ -1,14 +1,13 @@
-﻿using Orders.Application.Dtos;
+using Orders.Application.Dtos;
 
-namespace Restaurant.IntegrationMessages
+namespace Restaurant.IntegrationMessages;
+
+public record OrderReceivedIntegrationEvent
 {
-    public record OrderReceivedIntegrationEvent
+    public OrderReceivedIntegrationEvent(OrderDto order)
     {
-        public OrderReceivedIntegrationEvent(OrderDto order)
-        {
-            Order = order;
-        }
-
-        public OrderDto Order { get; private set; }
+        Order = order;
     }
+
+    public OrderDto Order { get; private set; }
 }

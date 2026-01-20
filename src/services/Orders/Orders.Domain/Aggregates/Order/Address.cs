@@ -1,42 +1,39 @@
-﻿using Orders.Domain.Aggregates.Order.Parameters;
+using Orders.Domain.Aggregates.Order.Parameters;
+using Restaurant.Common.ApplicationBuildingBlocks;
 using Restaurant.Common.DomainBuildingBlocks;
-using Restaurant.Common.FlowBuildingBlocks;
 
-namespace Orders.Domain.Aggregates.Order
+namespace Orders.Domain.Aggregates.Order;
+
+public sealed record Address : ValueObject
 {
-    public sealed class Address : ValueObject
+    internal Address(string postCode, string city, string street, string buildingNumber, string? flatNumber)
     {
-        internal Address(string postCode, string city, string street, string buildingNumber, string? flatNumber)
+        PostCode = postCode;
+        City = city;
+        Street = street;
+        BuildingNumber = buildingNumber;
+        FlatNumber = flatNumber;
+    }
+
+    public string PostCode { get; init; }
+
+    public string City { get; init; }
+
+    public string Street { get; init; }
+
+    public string BuildingNumber { get; init; }
+
+    public string? FlatNumber { get; init; }
+
+    internal static OperationResult<Address> CreateAddress(AddressCreationParams input)
+    {
+        if (string.IsNullOrWhiteSpace(input.PostCode) || string.IsNullOrWhiteSpace(input.City) ||
+            string.IsNullOrWhiteSpace(input.Street) || string.IsNullOrWhiteSpace(input.BuildingNumber))
         {
-            PostCode = postCode;
-            City = city;
-            Street = street;
-            BuildingNumber = buildingNumber;
-            FlatNumber = flatNumber;
+            return OperationResult<Address>.Failed(new ArgumentException("Address fields cannot be empty"));
         }
 
-        public string PostCode { get; init; }
-
-        public string City { get; init; }
-
-        public string Street { get; init; }
-
-        public string BuildingNumber { get; init; }
-
-        public string? FlatNumber { get; init; }
-
-        internal static OperationResult<Address> CreateAddress(AddressCreationParams input)
-        {
-            if (string.IsNullOrEmpty(input.PostCode) || string.IsNullOrEmpty(input.City) || 
-                string.IsNullOrEmpty(input.Street) || string.IsNullOrEmpty(input.BuildingNumber))
-            {
-                // TODO
-                var exception = new Exception();
-                return OperationResult<Address>.Failed(exception);
-            }
-
-            var address = new Address(input.PostCode, input.City, input.Street, input.BuildingNumber, input.FlatNumber);
-            return OperationResult<Address>.Success(address);
-        }
+        var address = new Address(input.PostCode, input.City, input.Street, input.BuildingNumber, input.FlatNumber);
+        return OperationResult<Address>.Success(address);
     }
 }

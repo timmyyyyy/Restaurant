@@ -1,10 +1,9 @@
-﻿using MassTransit;
+using MassTransit;
 
-namespace Restaurant.IntegrationMessages
+namespace Restaurant.IntegrationMessages;
+
+[ExcludeFromTopology]
+public interface IBaseOrderMessage
 {
-    [ExcludeFromTopology]
-    public interface IBaseOrderMessage
-    {
-        Guid OrderId { get; }
-    }
+    Guid OrderId { get; }
 }

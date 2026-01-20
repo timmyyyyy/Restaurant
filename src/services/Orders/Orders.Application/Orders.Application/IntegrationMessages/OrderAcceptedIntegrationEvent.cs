@@ -1,8 +1,7 @@
-﻿
-namespace Restaurant.IntegrationMessages
+
+namespace Restaurant.IntegrationMessages;
+
+public record OrderAcceptedIntegrationEvent : IBaseOrderMessage
 {
-    public record OrderAcceptedIntegrationEvent : IBaseOrderMessage
-    {
-        public Guid OrderId { get; init; }
-    }
+    public Guid OrderId { get; init; }
 }

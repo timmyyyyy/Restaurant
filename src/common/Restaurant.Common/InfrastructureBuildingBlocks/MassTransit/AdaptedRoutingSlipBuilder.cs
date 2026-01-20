@@ -1,14 +1,13 @@
-﻿using MassTransit;
 using System;
+using MassTransit;
 
-namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit
+namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
+
+public class AdaptedRoutingSlipBuilder(IMassTransitEndpointNameFormatter massTransitEndpointNameFormatter) : RoutingSlipBuilder(NewId.NextGuid()), IAdaptedRoutingSlipBuilder
 {
-    public class AdaptedRoutingSlipBuilder(IMassTransitEndpointNameFormatter massTransitEndpointNameFormatter) : RoutingSlipBuilder(NewId.NextGuid()), IAdaptedRoutingSlipBuilder
+    public void AddActivity(string name)
     {
-        public void AddActivity(string name)
-        {
-            var endpointFormatted = massTransitEndpointNameFormatter.FormatName(name, MassTransitEndpointOperationType.Activity);
-            this.AddActivity(name, new Uri(endpointFormatted));
-        }
+        var endpointFormatted = massTransitEndpointNameFormatter.FormatName(name, MassTransitEndpointOperationType.Activity);
+        this.AddActivity(name, new Uri(endpointFormatted));
     }
 }

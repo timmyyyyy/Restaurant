@@ -1,64 +1,70 @@
-﻿using MassTransit.Transports;
 using Orders.Domain.Aggregates.Order;
 using Orders.Infrastructure.Models;
 
-namespace Orders.Application.Dtos
+namespace Orders.Application.Dtos;
+
+public record OrderDto
 {
-    public record OrderDto
+    public Guid Id { get; init; }
+
+    public string? EmailAddress { get; init; }
+
+    public string? PhoneNumber { get; init; }
+
+    public Guid RestaurantId { get; init; }
+
+    public Guid? CustomerId { get; init; }
+
+    public required AddressDto DeliveryAddress { get; init; }
+
+    public required List<Guid> MenuItemsIds { get; init; }
+
+    public bool PaymentOnDelivery { get; init; }
+
+    public static explicit operator OrderDto(Order order)
     {
-        public Guid Id { get; init; }
-
-        public string? EmailAddress { get; init; }
-
-        public string? PhoneNumber { get; init; }
-
-        public Guid RestaurantId { get; init; }
-
-        public Guid? CustomerId { get; init; }
-
-        public AddressDto DeliveryAddress { get; init; }
-
-        public List<Guid> MenuItemsIds { get; init; }
-
-        public bool PaymentOnDelivery { get; init; }
-
-        public static explicit operator OrderDto (Order order)
+        return new()
         {
-            return new()
-            {
-                Id = order.Id,
-                EmailAddress = order.EmailAddress,
-                PhoneNumber = order.PhoneNumber,
-                RestaurantId = order.RestaurantId,
-                MenuItemsIds = order.MenuItemsIds,
-                PaymentOnDelivery = order.PaymentOnDelivery,
-                DeliveryAddress = (AddressDto)order.DeliveryAddress,
-                CustomerId = order.CustomerId,
-            };
-        }
+            Id = order.Id,
+            EmailAddress = order.EmailAddress,
+            PhoneNumber = order.PhoneNumber,
+            RestaurantId = order.RestaurantId,
+            MenuItemsIds = order.MenuItemsIds,
+            PaymentOnDelivery = order.PaymentOnDelivery,
+            DeliveryAddress = (AddressDto)order.DeliveryAddress,
+            CustomerId = order.CustomerId,
+        };
+    }
 
-        //public static explicit operator OrderSagaStateDbEntity (OrderDto order)
-        //{
-        //    return new()
-        //    {
-        //        CorrelationId = order.Id,
-        //        EmailAddress = order.EmailAddress,
-        //        PhoneNumber = order.PhoneNumber,
-        //        RestaurantId = order.RestaurantId,
-        //        MenuItemsIds = order.MenuItemsIds,
-        //        PaymentOnDelivery = order.PaymentOnDelivery,
-        //        DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
-        //        CustomerId = order.CustomerId,
-        //    };
-        //}
+    //public static explicit operator OrderSagaStateDbEntity (OrderDto order)
+    //{
+    //    return new()
+    //    {
+    //        CorrelationId = order.Id,
+    //        EmailAddress = order.EmailAddress,
+    //        PhoneNumber = order.PhoneNumber,
+    //        RestaurantId = order.RestaurantId,
+    //        MenuItemsIds = order.MenuItemsIds,
+    //        PaymentOnDelivery = order.PaymentOnDelivery,
+    //        DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
+    //        CustomerId = order.CustomerId,
+    //    };
+    //}
 
-        public static explicit operator OrderDto(OrderSagaStateDbEntity order)
+    public static explicit operator OrderDto(OrderSagaStateDbEntity order)
+    {
+        return new()
         {
-            return new()
+            Id = order.CorrelationId,
+            PaymentOnDelivery = order.PaymentOnDelivery,
+            DeliveryAddress = new AddressDto
             {
-                Id = order.CorrelationId,
-                PaymentOnDelivery = order.PaymentOnDelivery,
-            };
-        }
+                PostCode = "",
+                City = "",
+                Street = "",
+                BuildingNumber = ""
+            },
+            MenuItemsIds = []
+        };
     }
 }

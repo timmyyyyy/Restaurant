@@ -1,9 +1,6 @@
-﻿using System;
+namespace Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Common.DomainBuildingBlocks
+public abstract record ValueObject
 {
-    public abstract class ValueObject
-    {
-        // TODO
-    }
+    // TODO
 }

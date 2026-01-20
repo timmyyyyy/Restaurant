@@ -1,7 +1,6 @@
-﻿namespace Delivery.API.Application.IntegrationEvents
+namespace Delivery.API.Application.IntegrationEvents;
+
+public record OrderPickedUpForDeliveryIntegrationEvent
 {
-    public record OrderPickedUpForDeliveryIntegrationEvent
-    {
-        public Guid OrderId { get; init; }
-    }
+    public Guid OrderId { get; init; }
 }

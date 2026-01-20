@@ -1,12 +1,9 @@
-﻿using System;
+namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
 
-namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes
+public enum MenuItemAvailabilityType
 {
-    public enum MenuItemAvailabilityType
-    {
-        DaysOfTheWeek,
-        HoursOfTheDay,
-        DatePeriod,
-        SpecificDates
-    }
+    DaysOfTheWeek,
+    HoursOfTheDay,
+    DatePeriod,
+    SpecificDates
 }

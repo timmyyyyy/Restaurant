@@ -1,16 +1,15 @@
-﻿using Restaurant.Application.Dtos;
+using Restaurant.Application.Dtos;
 
-namespace Restaurant.IntegrationMessages
+namespace Restaurant.IntegrationMessages;
+
+public record PassOrderToValidationCommand
 {
-    public record PassOrderToValidationCommand
+    public PassOrderToValidationCommand() { }
+
+    public PassOrderToValidationCommand(OrderDto order)
     {
-        public PassOrderToValidationCommand() { }
-
-        public PassOrderToValidationCommand(OrderDto order)
-        {
-            Order = order;
-        }
-
-        public OrderDto Order { get; private set; }
+        Order = order;
     }
+
+    public required OrderDto Order { get; init; }
 }

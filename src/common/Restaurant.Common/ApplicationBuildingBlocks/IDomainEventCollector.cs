@@ -1,35 +1,34 @@
-﻿using MediatR;
-using Restaurant.Common.InfrastructureBuildingBlocks.DI;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
+using Restaurant.Common.InfrastructureBuildingBlocks.DI;
 
-namespace Restaurant.Common.ApplicationBuildingBlocks
+namespace Restaurant.Common.ApplicationBuildingBlocks;
+
+public interface IDomainEventCollector : IScopedDependency
 {
-    public interface IDomainEventCollector : IScopedDependency
-    {
-        void Add(IEnumerable<INotification> domainEvents);
+    void Add(IEnumerable<INotification> domainEvents);
 
-        Task Dispatch();
+    Task Dispatch(CancellationToken cancellationToken = default);
+}
+
+public sealed class DomainEventCollector(IMediator mediator) : IDomainEventCollector
+{
+    private readonly List<INotification> _domainEvents = [];
+
+    public void Add(IEnumerable<INotification> domainEvents)
+    {
+        _domainEvents.AddRange(domainEvents);
     }
 
-    public sealed class DomainEventCollector(IMediator mediator) : IDomainEventCollector
+    public async Task Dispatch(CancellationToken cancellationToken = default)
     {
-        private readonly List<INotification> _domainEvents = new();
-
-        public void Add(IEnumerable<INotification> domainEvents)
+        foreach (var domainEvent in _domainEvents)
         {
-            _domainEvents.AddRange(domainEvents);
+            await mediator.Publish(domainEvent, cancellationToken);
         }
 
-        public async Task Dispatch()
-        {
-            foreach (var domainEvent in _domainEvents)
-            {
-                await mediator.Publish(domainEvent);
-            }
-
-            _domainEvents.Clear();
-        }
+        _domainEvents.Clear();
     }
 }

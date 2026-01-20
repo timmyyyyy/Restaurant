@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes
+namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
+
+public sealed record MenuItemDaysOfWeekAvailability : MenuItemAvailability
 {
-    public sealed class MenuItemDaysOfWeekAvailability : MenuItemAvailability
-    {
-        internal MenuItemDaysOfWeekAvailability() { }
+    internal MenuItemDaysOfWeekAvailability() { }
 
-        public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.DaysOfTheWeek;
+    public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.DaysOfTheWeek;
 
-        public List<DayOfWeek> DaysOfWeek { get; init; }
+    public required List<DayOfWeek> DaysOfWeek { get; init; }
 
-        public override bool IsCurrentlyAvailable() => DaysOfWeek.Contains(DateTime.UtcNow.DayOfWeek);
-    }
+    public override bool IsCurrentlyAvailable() => DaysOfWeek.Contains(DateTime.UtcNow.DayOfWeek);
 }

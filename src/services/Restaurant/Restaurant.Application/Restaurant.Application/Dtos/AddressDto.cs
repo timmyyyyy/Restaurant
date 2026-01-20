@@ -1,17 +1,16 @@
-﻿namespace Restaurant.Application.Dtos
+namespace Restaurant.Application.Dtos;
+
+public record AddressDto
 {
-    public record AddressDto
-    {
-        public Guid Id { get; init; }
+    public Guid Id { get; init; }
 
-        public string PostCode { get; init; }
+    public required string PostCode { get; init; }
 
-        public string City { get; init; }
+    public required string City { get; init; }
 
-        public string Street { get; init; }
+    public required string Street { get; init; }
 
-        public string BuildingNumber { get; init; }
+    public required string BuildingNumber { get; init; }
 
-        public string? FlatNumber { get; init; }
-    }
+    public string? FlatNumber { get; init; }
 }

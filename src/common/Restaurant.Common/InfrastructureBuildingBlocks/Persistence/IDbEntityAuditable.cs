@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 
-namespace Restaurant.Common.InfrastructureBuildingBlocks.Persistence
+namespace Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+
+public interface IDbEntityAuditable
 {
-    public interface IDbEntityAuditable
-    {
-        Guid CreatedBy { get; set; }
+    Guid CreatedBy { get; set; }
 
-        DateTime CreatedDate { get; set; }
+    DateTime CreatedDate { get; set; }
 
-        Guid? UpdatedBy { get; set; }
+    Guid? UpdatedBy { get; set; }
 
-        DateTime? UpdatedDate { get; set; }
-    }
+    DateTime? UpdatedDate { get; set; }
 }

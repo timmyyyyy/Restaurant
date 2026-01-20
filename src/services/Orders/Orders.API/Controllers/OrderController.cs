@@ -1,21 +1,21 @@
-﻿using MediatR;
+using System.Threading;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Orders.Application.Commands;
 
-namespace Orders.API.Controllers
+namespace Orders.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class OrderController(IMediator mediator) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class OrderController(IMediator mediator) : ControllerBase
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder(CreateOrderDraftCommand command, CancellationToken cancellationToken)
     {
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder(CreateOrderDraftCommand command)
-        {
-            var response = await mediator.Send(command);
+        var response = await mediator.Send(command, cancellationToken);
 
-            // TODO
+        // TODO
 
-            return Ok(response);
-        }
+        return Ok(response);
     }
 }

@@ -1,15 +1,14 @@
-﻿namespace Orders.Domain.Aggregates.Order.Parameters
+namespace Orders.Domain.Aggregates.Order.Parameters;
+
+public record AddressCreationParams
 {
-    public record AddressCreationParams
-    {
-        public string PostCode { get; init; }
+    public required string PostCode { get; init; }
 
-        public string City { get; init; }
+    public required string City { get; init; }
 
-        public string Street { get; init; }
+    public required string Street { get; init; }
 
-        public string BuildingNumber { get; init; }
+    public required string BuildingNumber { get; init; }
 
-        public string? FlatNumber { get; init; }
-    }
+    public string? FlatNumber { get; init; }
 }

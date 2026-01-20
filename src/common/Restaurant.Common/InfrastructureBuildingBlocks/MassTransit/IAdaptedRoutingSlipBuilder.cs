@@ -1,10 +1,9 @@
-﻿using MassTransit;
+using MassTransit;
 using MassTransit.Courier;
 
-namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit
+namespace Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
+
+public interface IAdaptedRoutingSlipBuilder : IRoutingSlipBuilder, IRoutingSlipSendEndpointTarget
 {
-    public interface IAdaptedRoutingSlipBuilder : IRoutingSlipBuilder, IRoutingSlipSendEndpointTarget
-    {
-        void AddActivity(string name);
-    }
+    void AddActivity(string name);
 }

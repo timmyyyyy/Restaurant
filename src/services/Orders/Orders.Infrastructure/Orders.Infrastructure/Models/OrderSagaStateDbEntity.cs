@@ -1,24 +1,28 @@
-﻿using MassTransit;
-using Orders.Domain.Aggregates.Order;
+using System.ComponentModel.DataAnnotations;
+using MassTransit;
 using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
 
-namespace Orders.Infrastructure.Models
+namespace Orders.Infrastructure.Models;
+
+public class OrderSagaStateDbEntity : IDbEntityAuditable, SagaStateMachineInstance
 {
-    public class OrderSagaStateDbEntity : IDbEntityAuditable, SagaStateMachineInstance
-    {
-        // TODO optimistic concurrency field with version
-        public Guid CorrelationId { get; set; }
+    internal OrderSagaStateDbEntity() { }
 
-        public string CurrentState { get; set; }
+    // TODO optimistic concurrency field with version
+    public Guid CorrelationId { get; set; }
 
-        public bool PaymentOnDelivery { get; set; }
+    public required string CurrentState { get; set; }
 
-        public Guid CreatedBy { get; set; }
+    public bool PaymentOnDelivery { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+    public Guid CreatedBy { get; set; }
 
-        public Guid? UpdatedBy { get; set; }
+    public DateTime CreatedDate { get; set; }
 
-        public DateTime? UpdatedDate { get; set; }
-    }
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedDate { get; set; }
+
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
 }

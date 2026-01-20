@@ -1,12 +1,10 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Domain.Aggregates.Restaurant
+namespace Restaurant.Domain.Aggregates.Restaurant;
+
+public sealed record WorkingSchedule : ValueObject
 {
-    public sealed class WorkingSchedule : ValueObject
-    {
-        public IDictionary<DayOfWeek, WorkingHours> Schedule { get; init; }
-    }
+    public required IDictionary<DayOfWeek, WorkingHours> Schedule { get; init; }
 }

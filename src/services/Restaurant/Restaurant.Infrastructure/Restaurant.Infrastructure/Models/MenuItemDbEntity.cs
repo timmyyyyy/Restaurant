@@ -1,35 +1,36 @@
-﻿using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
 using Restaurant.Domain.Aggregates.Menu;
 using Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
 
-namespace Restaurant.Infrastructure.Models
+namespace Restaurant.Infrastructure.Models;
+
+public class MenuItemDbEntity : BaseDbEntitySoftDeletable
 {
-    public class MenuItemDbEntity : BaseDbEntitySoftDeletable
-    {
-        public string Name { get; set; }
+    internal MenuItemDbEntity() { }
 
-        public string Description { get; set; }
+    public required string Name { get; set; }
 
-        public MenuItemCategoryDbEntity ItemCategory { get; set; }
+    public required string Description { get; set; }
 
-        public int? Grammage { get; set; }
+    public required MenuItemCategoryDbEntity ItemCategory { get; set; }
 
-        public decimal Price { get; set; }
+    public int? Grammage { get; set; }
 
-        public IEnumerable<MenuItemAvailabilityDbEntity> Availability { get; set; }
+    public decimal Price { get; set; }
 
-        public bool IsCurrentlyDisabled { get; set; }
+    public required IEnumerable<MenuItemAvailabilityDbEntity> Availability { get; set; }
 
-        public static explicit operator MenuItem(MenuItemDbEntity entity)
-            => new()
-            {
-                Name = entity.Name,
-                Description = entity.Description,
-                IsCurrentlyDisabled = entity.IsCurrentlyDisabled,
-                Availability = entity.Availability.Select(x => (MenuItemAvailability)x),
-                Grammage = entity.Grammage,
-                Price = entity.Price,
-                ItemCategory = (MenuItemCategory)entity.ItemCategory
-            };
-    }
+    public bool IsCurrentlyDisabled { get; set; }
+
+    public static explicit operator MenuItem(MenuItemDbEntity entity)
+        => new()
+        {
+            Name = entity.Name,
+            Description = entity.Description,
+            IsCurrentlyDisabled = entity.IsCurrentlyDisabled,
+            Availability = entity.Availability.Select(x => (MenuItemAvailability)x),
+            Grammage = entity.Grammage,
+            Price = entity.Price,
+            ItemCategory = (MenuItemCategory)entity.ItemCategory
+        };
 }

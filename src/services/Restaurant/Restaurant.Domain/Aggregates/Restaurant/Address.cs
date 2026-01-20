@@ -1,17 +1,16 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
+using Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Domain.Aggregates.Restaurant
+namespace Restaurant.Domain.Aggregates.Restaurant;
+
+public sealed record Address : ValueObject
 {
-    public sealed class Address : ValueObject
-    {
-        public string PostCode { get; init; }
+    public required string PostCode { get; init; }
 
-        public string City { get; init; }
+    public required string City { get; init; }
 
-        public string Street { get; init; }
+    public required string Street { get; init; }
 
-        public string BuildingNumber { get; init; }
+    public required string BuildingNumber { get; init; }
 
-        public string? FlatNumber { get; init; }
-    }
+    public string? FlatNumber { get; init; }
 }

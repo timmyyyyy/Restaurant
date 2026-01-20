@@ -1,47 +1,41 @@
-﻿using Orders.Domain.Aggregates.Order;
+using Orders.Domain.Aggregates.Order;
 using Orders.Infrastructure.Models;
 
-namespace Orders.Application.Dtos
+namespace Orders.Application.Dtos;
+
+public record AddressDto
 {
-    public record AddressDto
+    public required string PostCode { get; init; }
+
+    public required string City { get; init; }
+
+    public required string Street { get; init; }
+
+    public required string BuildingNumber { get; init; }
+
+    public string? FlatNumber { get; init; }
+
+    public static explicit operator AddressDto(Address address)
     {
-        public string PostCode { get; init; }
-
-        public string City { get; init; }
-
-        public string Street { get; init; }
-
-        public string BuildingNumber { get; init; }
-
-        public string? FlatNumber { get; init; }
-
-        public static explicit operator AddressDto (Address address)
+        return new()
         {
-            return new()
-            {
-                PostCode = address.PostCode,
-                City = address.City,
-                Street = address.Street,
-                BuildingNumber = address.BuildingNumber,
-                FlatNumber = address.FlatNumber
-            };
-        }
+            PostCode = address.PostCode,
+            City = address.City,
+            Street = address.Street,
+            BuildingNumber = address.BuildingNumber,
+            FlatNumber = address.FlatNumber
+        };
+    }
 
-        public static explicit operator AddressDbEntity (AddressDto address)
+    public static explicit operator AddressDto(AddressDbEntity address)
+    {
+        return new()
         {
-            return new AddressDbEntity(address.PostCode, address.City, address.Street, address.BuildingNumber, address.FlatNumber);
-        }
-
-        public static explicit operator AddressDto(AddressDbEntity address)
-        {
-            return new()
-            {
-                PostCode = address.PostCode,
-                City = address.City,
-                Street = address.Street,
-                BuildingNumber = address.BuildingNumber,
-                FlatNumber = address.FlatNumber
-            };
-        }
+            PostCode = address.PostCode,
+            City = address.City,
+            Street = address.Street,
+            BuildingNumber = address.BuildingNumber,
+            FlatNumber = address.FlatNumber
+        };
     }
 }

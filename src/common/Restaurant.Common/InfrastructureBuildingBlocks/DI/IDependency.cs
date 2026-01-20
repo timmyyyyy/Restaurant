@@ -1,14 +1,13 @@
-﻿namespace Restaurant.Common.InfrastructureBuildingBlocks.DI
+namespace Restaurant.Common.InfrastructureBuildingBlocks.DI;
+
+public interface ITransientDependency
 {
-    public interface ITransientDependency
-    {
-    }
+}
 
-    public interface IScopedDependency
-    {
-    }
+public interface IScopedDependency
+{
+}
 
-    public interface ISingletonDependency
-    {
-    }
+public interface ISingletonDependency
+{
 }

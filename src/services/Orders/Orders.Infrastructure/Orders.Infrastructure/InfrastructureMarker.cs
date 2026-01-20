@@ -1,6 +1,5 @@
-﻿namespace Orders.Infrastructure
+namespace Orders.Infrastructure;
+
+public class InfrastructureMarker
 {
-    public class InfrastructureMarker
-    {
-    }
 }

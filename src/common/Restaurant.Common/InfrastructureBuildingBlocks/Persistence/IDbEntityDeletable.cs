@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 
-namespace Restaurant.Common.InfrastructureBuildingBlocks.Persistence
+namespace Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
+
+public interface IDbEntityDeletable
 {
-    public interface IDbEntityDeletable
-    {
-        bool IsDeleted { get; set; }
+    bool IsDeleted { get; set; }
 
-        Guid? DeletedBy { get; set; }
+    Guid? DeletedBy { get; set; }
 
-        DateTime? DeletedDate { get; set; }
+    DateTime? DeletedDate { get; set; }
 
-    }
 }

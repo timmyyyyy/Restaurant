@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Orders.Application;
@@ -7,84 +7,84 @@ using Orders.Infrastructure;
 using Orders.Infrastructure.Models;
 using Restaurant.Common.InfrastructureBuildingBlocks;
 using Restaurant.Common.InfrastructureBuildingBlocks.MassTransit;
-using System.Reflection;
 
-namespace Orders.API.Infrastructure.Extensions
+namespace Orders.API.Infrastructure.Extensions;
+
+public static class WebApplicationBuilderExtensions
 {
-    public static class WebApplicationBuilderExtensions
+    public static WebApplicationBuilder AddDbConfiguration(this WebApplicationBuilder builder)
     {
-        public static WebApplicationBuilder AddDbConfiguration(this WebApplicationBuilder builder)
+        builder.Services.AddScoped<SaveChangesInterceptor, DomainEventPublisherInterceptor>();
+
+        builder.Services.AddDbContext<OrdersDbContext>((sp, options) =>
         {
-            builder.Services.AddScoped<SaveChangesInterceptor, DomainEventPublisherInterceptor>();
+            var connectionString = builder.Configuration.GetConnectionString("OrdersDb")
+                ?? builder.Configuration.GetConnectionString("Default");
 
-            builder.Services.AddDbContext<OrdersDbContext>((sp, options) =>
+            options.UseSqlServer(connectionString, sqlOptions =>
             {
-                var connectionString = builder.Configuration.GetConnectionString("OrdersDb") 
-                    ?? builder.Configuration.GetConnectionString("Default");
-                    
-                options.UseSqlServer(connectionString, sqlOptions =>
-                {
-                    sqlOptions.MigrationsAssembly(typeof(InfrastructureMarker).Assembly.FullName);
-                    sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 5,
-                        maxRetryDelay: TimeSpan.FromSeconds(30),
-                        errorNumbersToAdd: null);
-                });
-
-                var interceptors = sp.GetRequiredService<SaveChangesInterceptor>();
-                options.AddInterceptors(interceptors);
+                sqlOptions.MigrationsAssembly(typeof(InfrastructureMarker).Assembly.FullName);
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
             });
 
-            builder.Services.AddHostedService<MigrationsHostedService<OrdersDbContext>>();
+            var interceptors = sp.GetRequiredService<SaveChangesInterceptor>();
+            options.AddInterceptors(interceptors);
+        });
 
-            return builder;
-        }
+        builder.Services.AddHostedService<MigrationsHostedService<OrdersDbContext>>();
 
-        public static WebApplicationBuilder AddMassTransitConfiguration(this WebApplicationBuilder builder)
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddMassTransitConfiguration(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMassTransit(x =>
         {
-            builder.Services.AddMassTransit(x =>
+            x.SetKebabCaseEndpointNameFormatter();
+
+            x.AddSagaStateMachine<OrderStateMachine, OrderSagaStateDbEntity>()
+                .EntityFrameworkRepository(x =>
+                {
+                    x.ConcurrencyMode = ConcurrencyMode.Optimistic;
+                    x.ExistingDbContext<OrdersDbContext>();
+                });
+
+            x.AddEntityFrameworkOutbox<OrdersDbContext>(x =>
             {
-                x.SetKebabCaseEndpointNameFormatter();
+                x.UseSqlServer();
 
-                x.AddSagaStateMachine<OrderStateMachine, OrderSagaStateDbEntity>()
-                    .EntityFrameworkRepository(x =>
-                    {
-                        // TODO concurrency mode
-                        x.ExistingDbContext<OrdersDbContext>();
-                    });
-
-                x.AddEntityFrameworkOutbox<OrdersDbContext>(x =>
-                {
-                    x.UseSqlServer();
-
-                    x.UseBusOutbox();
-                });
-
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host("localhost", "/", h =>
-                    {
-                        h.Username("admin");
-                        h.Password("admin123");
-                    });
-                    
-                    cfg.ConfigureEndpoints(context);
-                });
-
-                x.AddActivitiesFromNamespaceContaining<ApplicationMarker>();
+                x.UseBusOutbox();
             });
 
-            builder.Services.AddOptions<MassTransitHostOptions>()
-                .Configure(options =>
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("localhost", "/", h =>
                 {
-                    options.WaitUntilStarted = true;
+                    h.Username("admin");
+                    h.Password("admin123");
                 });
 
-            builder.Services.AddSingleton<IMassTransitEndpointNameFormatter, RabbitMqEndpointNameFormatter>();
-            builder.Services.AddTransient<IAdaptedRoutingSlipBuilder, AdaptedRoutingSlipBuilder>();
+                cfg.UseMessageRetry(r => r.Intervals(100, 500, 1000, 2000, 5000));
+
+                cfg.ConfigureEndpoints(context);
+            });
+
+            x.AddActivitiesFromNamespaceContaining<ApplicationMarker>();
+        });
+
+        builder.Services.AddOptions<MassTransitHostOptions>()
+            .Configure(options =>
+            {
+                options.WaitUntilStarted = true;
+            });
+
+        builder.Services.AddSingleton<IMassTransitEndpointNameFormatter, RabbitMqEndpointNameFormatter>();
+        builder.Services.AddTransient<IAdaptedRoutingSlipBuilder, AdaptedRoutingSlipBuilder>();
 
 
-            return builder;
-        }
+        return builder;
     }
 }

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace Restaurant.Infrastructure;
 
-namespace Restaurant.Infrastructure
+public class InfrastructureMarker
 {
-    public class InfrastructureMarker
-    {
-    }
 }

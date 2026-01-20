@@ -1,6 +1,5 @@
-﻿namespace Restaurant.Common
+namespace Restaurant.Common;
+
+public class CommonMarker
 {
-    public class CommonMarker
-    {
-    }
 }

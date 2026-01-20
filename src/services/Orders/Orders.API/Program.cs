@@ -1,9 +1,9 @@
-using Orders.API.Infrastructure.Extensions;
 using System.Reflection;
-using Restaurant.Common.InfrastructureBuildingBlocks.DI;
+using Orders.API.Infrastructure.Extensions;
 using Orders.Application;
 using Orders.Infrastructure;
 using Restaurant.Common;
+using Restaurant.Common.InfrastructureBuildingBlocks.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 

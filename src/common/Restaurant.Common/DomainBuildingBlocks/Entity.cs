@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 
-namespace Restaurant.Common.DomainBuildingBlocks
+namespace Restaurant.Common.DomainBuildingBlocks;
+
+public abstract class Entity
 {
-    public abstract class Entity
-    {
-        public Guid Id { get; init; }
-    }
+    public Guid Id { get; init; }
 }

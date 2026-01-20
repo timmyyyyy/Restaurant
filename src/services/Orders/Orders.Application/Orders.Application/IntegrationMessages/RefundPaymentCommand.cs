@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace Restaurant.IntegrationMessages;
 
-namespace Restaurant.IntegrationMessages
+public record RefundPaymentCommand
 {
-    public record RefundPaymentCommand
-    {
-        public Guid OrderId { get; init; }
-    }
+    public Guid OrderId { get; init; }
 }

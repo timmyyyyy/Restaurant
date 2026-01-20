@@ -1,43 +1,39 @@
-﻿using Orders.Domain.Aggregates.Order;
+using Orders.Domain.Aggregates.Order;
 using Restaurant.Common.InfrastructureBuildingBlocks.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Orders.Infrastructure.Models
+namespace Orders.Infrastructure.Models;
+
+public class OrderDbEntity : BaseDbEntity
 {
-    public class OrderDbEntity : BaseDbEntity
-    {
-        public OrderStatus Status { get; set; }
+    internal OrderDbEntity() { }
 
-        public string? EmailAddress { get; set; }
+    public OrderStatus Status { get; set; }
 
-        public string? PhoneNumber { get; set; }
+    public string? EmailAddress { get; set; }
 
-        public Guid? CustomerId { get; set; }
+    public string? PhoneNumber { get; set; }
 
-        public Guid RestaurantId { get; set; }
+    public Guid? CustomerId { get; set; }
 
-        public AddressDbEntity DeliveryAddress { get; set; }
+    public Guid RestaurantId { get; set; }
 
-        public List<Guid> MenuItemsIds { get; set; }
+    public required AddressDbEntity DeliveryAddress { get; set; }
 
-        public bool PaymentOnDelivery { get; set; }
+    public required List<Guid> MenuItemsIds { get; set; }
 
-        public static implicit operator OrderDbEntity(Order order) =>
-            new OrderDbEntity()
-            {
-                Id = order.Id,
-                Status = order.Status,
-                EmailAddress = order.EmailAddress,
-                PhoneNumber = order.PhoneNumber,
-                CustomerId = order.CustomerId,
-                RestaurantId = order.RestaurantId,
-                DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
-                MenuItemsIds = order.MenuItemsIds,
-                PaymentOnDelivery = order.PaymentOnDelivery,
-            };
-    }
+    public bool PaymentOnDelivery { get; set; }
+
+    public static implicit operator OrderDbEntity(Order order) =>
+        new()
+        {
+            Id = order.Id,
+            Status = order.Status,
+            EmailAddress = order.EmailAddress,
+            PhoneNumber = order.PhoneNumber,
+            CustomerId = order.CustomerId,
+            RestaurantId = order.RestaurantId,
+            DeliveryAddress = (AddressDbEntity)order.DeliveryAddress,
+            MenuItemsIds = order.MenuItemsIds,
+            PaymentOnDelivery = order.PaymentOnDelivery,
+        };
 }

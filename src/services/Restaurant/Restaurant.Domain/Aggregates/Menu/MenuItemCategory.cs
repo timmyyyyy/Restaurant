@@ -1,9 +1,8 @@
-﻿using Restaurant.Common.DomainBuildingBlocks;
+using Restaurant.Common.DomainBuildingBlocks;
 
-namespace Restaurant.Domain.Aggregates.Menu
+namespace Restaurant.Domain.Aggregates.Menu;
+
+public sealed record MenuItemCategory : ValueObject
 {
-    public sealed class MenuItemCategory : ValueObject
-    {
-        public string CategoryName { get; init; }
-    }
+    public required string CategoryName { get; init; }
 }
