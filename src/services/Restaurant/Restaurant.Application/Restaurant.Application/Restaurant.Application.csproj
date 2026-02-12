@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.2.5" />
+    <PackageReference Include="MediatR" Version="14.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Restaurant.Domain\Restaurant.Domain.csproj" />
+    <ProjectReference Include="..\..\Restaurant.Infrastructure\Restaurant.Infrastructure\Restaurant.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

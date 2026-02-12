@@ -1,4 +1,9 @@
+using System.Reflection;
 using Restaurant.API.Infrastructure.Extensions;
+using Restaurant.Application;
+using Restaurant.Infrastructure;
+using Restaurant.Common;
+using Restaurant.Common.InfrastructureBuildingBlocks.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +16,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var assemblies = new Assembly[] { typeof(ApplicationMarker).Assembly, typeof(InfrastructureMarker).Assembly, Assembly.GetExecutingAssembly(), typeof(CommonMarker).Assembly };
+builder.Services.AddAutomaticDependencyRegistration(assemblies);
+
 builder.AddDbConfiguration();
 builder.AddMassTransitConfiguration();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>());
 
 var app = builder.Build();
 
@@ -32,3 +42,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

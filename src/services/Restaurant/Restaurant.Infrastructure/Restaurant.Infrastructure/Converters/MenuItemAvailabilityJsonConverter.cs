@@ -9,20 +9,25 @@ public class MenuItemAvailabilityJsonConverter : JsonConverter<MenuItemAvailabil
     {
         using var jsonDocument = JsonDocument.ParseValue(ref reader);
 
-        var typeString = jsonDocument.RootElement.GetProperty(nameof(MenuItemAvailability.MenuItemAvailabilityType)).GetString()!;
-        var type = Enum.Parse(typeof(MenuItemAvailabilityType), typeString, true);
+        var typeInt = jsonDocument.RootElement.GetProperty(nameof(MenuItemAvailability.MenuItemAvailabilityType)).GetInt32()!;
+        var type = (MenuItemAvailabilityType)typeInt;
 
         var rawText = jsonDocument.RootElement.GetRawText();
+        
+        var deserializationOptions = new JsonSerializerOptions(options);
+        deserializationOptions.Converters.Clear();
+        deserializationOptions.IncludeFields = true;
+        
         return type switch
         {
             MenuItemAvailabilityType.HoursOfTheDay =>
-                JsonSerializer.Deserialize<MenuItemHoursOfDayAvailability>(rawText, options),
+                JsonSerializer.Deserialize<MenuItemHoursOfDayAvailability>(rawText, deserializationOptions),
             MenuItemAvailabilityType.DaysOfTheWeek =>
-                JsonSerializer.Deserialize<MenuItemDaysOfWeekAvailability>(rawText, options),
+                JsonSerializer.Deserialize<MenuItemDaysOfWeekAvailability>(rawText, deserializationOptions),
             MenuItemAvailabilityType.DatePeriod =>
-                JsonSerializer.Deserialize<MenuItemDatePeriodAvailability>(rawText, options),
+                JsonSerializer.Deserialize<MenuItemDatePeriodAvailability>(rawText, deserializationOptions),
             MenuItemAvailabilityType.SpecificDates =>
-                JsonSerializer.Deserialize<MenuItemSpecificDatesAvailability>(rawText, options),
+                JsonSerializer.Deserialize<MenuItemSpecificDatesAvailability>(rawText, deserializationOptions),
             _ => throw new InvalidOperationException("Not supported MenuItemAvailabilityType")
         };
     }
@@ -32,3 +37,4 @@ public class MenuItemAvailabilityJsonConverter : JsonConverter<MenuItemAvailabil
         JsonSerializer.Serialize(writer, (object)value, value.GetType(), options);
     }
 }
+

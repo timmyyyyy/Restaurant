@@ -25,6 +25,7 @@ public class MenuItemDbEntity : BaseDbEntitySoftDeletable
     public static explicit operator MenuItem(MenuItemDbEntity entity)
         => new()
         {
+            Id = entity.Id,
             Name = entity.Name,
             Description = entity.Description,
             IsCurrentlyDisabled = entity.IsCurrentlyDisabled,

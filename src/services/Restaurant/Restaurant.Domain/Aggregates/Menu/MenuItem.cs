@@ -5,8 +5,10 @@ using Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
 
 namespace Restaurant.Domain.Aggregates.Menu;
 
-public sealed record MenuItem : ValueObject
+public sealed class MenuItem : Entity
 {
+    internal MenuItem() { }
+
     public required string Name { get; init; }
 
     public required string Description { get; init; }

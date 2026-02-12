@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Restaurant.Domain.Aggregates.Menu.ItemAvailabilityTypes;
 
 public sealed record MenuItemSpecificDatesAvailability : MenuItemAvailability
 {
+    [JsonConstructor]
     internal MenuItemSpecificDatesAvailability() { }
 
     public override MenuItemAvailabilityType MenuItemAvailabilityType => MenuItemAvailabilityType.SpecificDates;

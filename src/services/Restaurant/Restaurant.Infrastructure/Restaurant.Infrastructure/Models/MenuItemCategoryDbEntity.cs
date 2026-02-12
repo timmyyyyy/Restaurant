@@ -10,5 +10,9 @@ public class MenuItemCategoryDbEntity : BaseDbEntitySoftDeletable
     public required string CategoryName { get; set; }
 
     public static explicit operator MenuItemCategory(MenuItemCategoryDbEntity entity)
-        => new() { CategoryName = entity.CategoryName };
+        => new() 
+        { 
+            Id = entity.Id,
+            CategoryName = entity.CategoryName 
+        };
 }
