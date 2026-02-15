@@ -8,9 +8,7 @@ export const metadata: Metadata = {
   description: "Orders App",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+export default function RootLayout({ children }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (

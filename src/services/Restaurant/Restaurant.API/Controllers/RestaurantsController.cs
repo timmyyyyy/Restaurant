@@ -22,21 +22,17 @@ public class RestaurantsController : ControllerBase
     [HttpGet("nearest")]
     public async Task<IActionResult> GetNearestRestaurant(string customerAddress)
     {
-        // TODO, for now we return always the same restaurant id
-        var firstRestaurant = await _dbContext.Restaurants.FirstOrDefaultAsync();
-        var restaurant = firstRestaurant?.Id ?? Guid.Empty;
-        var result = new { restaurantId = restaurant };
+        var queryResult = await _mediator.Send(new GetNearestRestaurantQuery(customerAddress));
+
+        var result = new { restaurantId = queryResult.Value };
         return Ok(result);
     }
 
     [HttpGet("{restaurantId}/menu")]
     public async Task<IActionResult> GetMenuByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
     {
-        var menu = await _mediator.Send(new GetMenuByRestaurantIdQuery(restaurantId), cancellationToken);
-        
-        if (menu == null)
-            return NotFound(new { message = "Menu not found for the specified restaurant" });
-        
-        return Ok(menu);
+        var result = await _mediator.Send(new GetMenuByRestaurantIdQuery(restaurantId), cancellationToken);
+
+        return Ok(result.Value);
     }
 }

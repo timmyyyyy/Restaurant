@@ -1,6 +1,7 @@
 using System.Reflection;
 using Restaurant.API.Infrastructure.Extensions;
 using Restaurant.Application;
+using Restaurant.Common.InfrastructureBuildingBlocks;
 using Restaurant.Infrastructure;
 using Restaurant.Common;
 using Restaurant.Common.InfrastructureBuildingBlocks.DI;
@@ -16,13 +17,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var assemblies = new Assembly[] { typeof(ApplicationMarker).Assembly, typeof(InfrastructureMarker).Assembly, Assembly.GetExecutingAssembly(), typeof(CommonMarker).Assembly };
+var assemblies = new Assembly[] { typeof(ApplicationMarker).Assembly, typeof(InfrastructureMarker).Assembly, Assembly.GetExecutingAssembly(),
+    typeof(CommonMarker).Assembly };
 builder.Services.AddAutomaticDependencyRegistration(assemblies);
 
 builder.AddDbConfiguration();
 builder.AddMassTransitConfiguration();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>());
+builder.Services.AddFluentValidationWithOperationResult(typeof(ApplicationMarker).Assembly);
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>();
+    cfg.AddValidationBehavior();
+});
 
 var app = builder.Build();
 

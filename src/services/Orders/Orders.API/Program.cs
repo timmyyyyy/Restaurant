@@ -4,6 +4,7 @@ using Orders.Application;
 using Orders.Infrastructure;
 using Restaurant.Common;
 using Restaurant.Common.InfrastructureBuildingBlocks.DI;
+using Restaurant.Common.InfrastructureBuildingBlocks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +21,15 @@ var assemblies = new Assembly[] { typeof(ApplicationMarker).Assembly, typeof(Inf
 builder.Services.AddAutomaticDependencyRegistration(assemblies);
 
 builder.AddMassTransitConfiguration();
-
 builder.AddDbConfiguration();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>());
+builder.Services.AddFluentValidationWithOperationResult(typeof(ApplicationMarker).Assembly);
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<ApplicationMarker>();
+    cfg.AddValidationBehavior();
+});
 
 var app = builder.Build();
 
